@@ -1,5 +1,7 @@
 [user]
-	email = cj@null.computer
-	name = w3cj			
+	name = CBroz1
+	email = CBroz@DataJoint.com
+[init]
+	defaultBranch = main
 [core]
-	editor = nano
+	editor = subl
