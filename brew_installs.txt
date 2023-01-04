@@ -1,0 +1,24 @@
+# xargs brew install < brew_installs.txt
+
+automake
+c-blosc
+cask
+dos2unix
+gnupg
+graphviz
+hdf5
+llvm@12
+neovim
+pre-commit
+pyenv
+pyqt@5
+python@3.10
+rbenv
+ruby
+ruby@2.7
+sip
+spotify-tui
+spotifyd
+tmux
+yq
+zlib
