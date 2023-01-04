@@ -3,8 +3,8 @@
 ## Orig version is saved in .bash_profile.pysave
 ## Setting PATH for Python 3.9
 export PATH="/usr/local/bin:$PATH"
-export PATH="$HOME/.poetry/bin:$PATH"
-export PATH="/opt/homebrew/bin:$PATH"
+# export PATH="$HOME/.poetry/bin:$PATH"
+# export PATH="/opt/homebrew/bin:$PATH"
 export PYENV_ROOT="$HOME/.pyenv"
 export HDF5_DIR=/opt/homebrew/opt/hdf5
 eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -62,6 +62,10 @@ launchctl unload -w /Library/LaunchAgents/com.adobe.AdobeCreativeCloud.plist > /
 launchctl unload -w /Library/LaunchAgents/com.adobe.ccxprocess.plist > /dev/null 2>&1
 launchctl unload -w /System/Library/LaunchAgents/com.apple.rcd.plist > /dev/null 2>&1
 
+## OS 
+defaults write com.apple.screencapture disable-shadow -bool true # turn off app shadows
+
+
 # --------------------- Aliases ---------------------
 ## General
 alias o="open ."
@@ -91,7 +95,7 @@ alias gp='git pull'
 ## Docker
 alias dockerprune="docker image prune -f; docker volume prune -f; docker builder prune -fa" 
 alias dockerremove="docker stop $(docker ps -a -q); docker rm $(docker ps -a -q)"
-alias dockerup="docker compose --env-file ./docker/.env -f ./docker/docker-compose-test.yaml up --build --force-recreate --detach"
+alias dockerup="docker compose --env-file ./docker/.env -f ./docker/docker-compose*.yaml up --build --force-recreate --detach"
 alias dockerdn="docker compose -f ./docker/docker-compose-test.yaml down --volumes"
 ## cd shortcuts
 alias gogo="cd '/Users/cb/Google Drive/My Drive/'"
@@ -116,6 +120,10 @@ alias pypse="/Users/cb/miniforge3/envs/pse/bin/python -m IPython --no-autoindent
 alias dlc="conda activate dlc" # DLC
 alias godlc="off; cd '/Users/cb/Documents/dev/'; dlc"
 alias pydlc="/Users/cb/miniforge3/envs/dlc/bin/python -m IPython --no-autoindent"
+## Princeton
+alias apps='salt Pni; ssh cb1848@scotty.pni.princeton.edu'
+alias spock='salt Pni; ssh -XY cb1848@scotty.pni.princeton.edu'
+alias scotty='salt Pni; ssh -XY cb1848@scotty.pni.princeton.edu'
 
 # --------------------- Functions ---------------------
 piphas() { pip list | grep "$1"; }
@@ -129,3 +137,11 @@ cdd() { cd ./*"$1"*; }
 
 # add kernel: ipython kernel install --name "local-venv" --user
 . /Users/cb/miniforge3/etc/profile.d/conda.sh
+
+test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash" || true
+
+# source ${HOME}/.rvm/scripts/rvm # ruby version manager
+rvm --default use 2.7 >/dev/null
+
+# clear
+echo "warpd: A-M-x, A-M-c. hjkl er"
