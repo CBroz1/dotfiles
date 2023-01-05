@@ -263,6 +263,28 @@
         "when": "editorTextFocus"
     },
     {
+        "key": "alt+shift+up",
+        "command": "cursorMove",
+        "args": {
+            "to": "up",
+            "by": "line",
+            "select": true,
+            "value": 10
+        },
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "alt+shift+down",
+        "command": "cursorMove",
+        "args": {
+            "to": "down",
+            "by": "line",
+            "select": true,
+            "value": 10
+        },
+        "when": "editorTextFocus"
+    },
+    {
         "key": "alt+backspace",
         "command": "workbench.action.terminal.deleteWordPartLeft", 
         "when": "terminalFocus"
@@ -318,5 +340,13 @@
         "args": {
           "text": "quit\u000D"
         }
+    },
+    {
+        "key": "cmd+3",
+        "command": "-workbench.action.openEditorAtIndex3"
+    },
+    {
+        "key": "cmd+3",
+        "command": "-workbench.action.focusThirdEditorGroup"
     },
 ]
