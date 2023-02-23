@@ -23,8 +23,9 @@ emojis=("💀" "👽" "👾" "💜" "🦄" "🐙" "🌸" "🌄" "🎃" "🎆" "�
 EMOJI=${emojis[$RANDOM % ${#emojis[@]} ]}
 # PS1 needs brackets around to prevent overwrite
 export PS1="\[$EMOJI \[$(tput setaf 140)\]\W \033[m\]> \]" 
+# -M ' moded' -U ' untrkd' -A ' stgd' -f '[%b%a%m%u]
 git_branch_info () {
-   echo -ne "\033[36m$(vcprompt -f '[%b] ')"
+   echo -ne "\033[36m$(vcprompt -M ' moded' -U ' untrkd' -A ' stgd' -f '[%b%a] ')\033[m"
 }
 # export PS1="$EMOJI \[$(tput setaf 140)\]\W \033[m>"
 # git_branch_info () {
@@ -37,7 +38,8 @@ export LSCOLORS=ExFxBxDxCxegedabagacad
 
 export HISTFILESIZE=100000
 export HISTSIZE=100000
-# export COMPOSE_DOCKER_CLI_BUILD=0
+export BASH_SILENCE_DEPRECATION_WARNING=1
+export COMPOSE_DOCKER_CLI_BUILD=0
 ## make tab cycle through commands after listing
 bind '"\t":menu-complete'
 bind 'TAB:menu-complete'
@@ -74,7 +76,7 @@ alias ll='ls -aGg'
 alias ss='subl -a '
 alias python='python3'
 alias sm='/Applications/Sublime\ Merge.app/Contents/SharedSupport/bin/smerge'
-alias pie="pip list -e | grep 'workf\|elem\|adamacs'"
+alias pie="pip list -e | grep 'workf\|elem\|adamacs\|dataj'"
 alias jupysync='jupytext --to py notebooks/0*ipynb; mv notebooks/*py notebooks/py_scripts'
 alias gitexec='git config core.fileMode false'
 alias bck="echo ' > /dev/null 2>&1 &' | pbcopy"
@@ -85,8 +87,13 @@ alias loadprofile='source ~/.bash_profile'
 alias matlab="/Applications/MATLAB_R2022a.app/bin/matlab -nojvm -nodesktop"
 alias firefox="/Applications/Firefox.app/Contents/MacOS/firefox -P"
 alias sp="spotifyd;spt"
+alias spellcheckdir="cspell -c cspell.json ./**/*{py,md,yaml}"
+alias precommitcheck="pre-commit run --all-files"
+alias mdlcheck="goruby; mdl -c .markdownlint.yaml ."
+# alias loadenv="export $(grep -v '^#' .env | xargs)"
 ## Git
 alias gb="vcprompt -M ' moded' -U ' untrkd' -A ' stgd' -f '[%b%a%m%u]'"
+# alias gb='git_branch_info'
 alias ga='git add'
 alias gaa='git add .'
 alias gc='git commit'
@@ -98,13 +105,15 @@ alias dockerremove="docker stop $(docker ps -a -q); docker rm $(docker ps -a -q)
 alias dockerup="docker compose --env-file ./docker/.env -f ./docker/docker-compose*.yaml up --build --force-recreate --detach"
 alias dockerdn="docker compose -f ./docker/docker-compose-test.yaml down --volumes"
 ## cd shortcuts
+export ref="/Users/cb/Google Drive/My Drive/ref/"
+export dev="/Users/cb/Documents/dev/"
 alias gogo="cd '/Users/cb/Google Drive/My Drive/'"
 alias goref="cd '/Users/cb/Google Drive/My Drive/ref/'"
-alias godev="cd '/Users/cb/Documents/dev'"
+alias godev="cd '/Users/cb/Documents/dev/'"
 ## Environments
 alias off="conda deactivate"
 alias tmp="off; conda activate tmp" # Temp
-alias pyele="/Users/cb/miniforge3/envs/tmp/bin/python -m IPython --no-autoindent"
+alias pytmp="/Users/cb/miniforge3/envs/tmp/bin/python -m IPython --no-autoindent"
 alias ele="conda activate ele" # Elements
 alias goele="off; cd '/Users/cb/Documents/dev/'; ele"
 alias pyele="/Users/cb/miniforge3/envs/ele/bin/python -m IPython --no-autoindent"
@@ -120,6 +129,10 @@ alias pypse="/Users/cb/miniforge3/envs/pse/bin/python -m IPython --no-autoindent
 alias dlc="conda activate dlc" # DLC
 alias godlc="off; cd '/Users/cb/Documents/dev/'; dlc"
 alias pydlc="/Users/cb/miniforge3/envs/dlc/bin/python -m IPython --no-autoindent"
+alias cai="conda activate caimg"
+alias pycai="/Users/cb/miniforge3/envs/caimg/bin/python -m IPython --no-autoindent"
+## Ruby
+alias goruby="source ${HOME}/.rvm/scripts/rvm # ruby version manager; rvm --default use 2.7 >/dev/null"
 ## Princeton
 alias apps='salt Pni; ssh cb1848@scotty.pni.princeton.edu'
 alias spock='salt Pni; ssh -XY cb1848@scotty.pni.princeton.edu'
@@ -130,6 +143,8 @@ piphas() { pip list | grep "$1"; }
 act() { conda activate "$1"; }
 ipy() { /Users/cb/miniforge3/envs/"$1"/bin/python -m IPython --no-autoindent; }
 cdd() { cd ./*"$1"*; }
+spellcheck() { cspell check "$1" --color | less -r; }
+jupythis() { jupytext --to py notebooks/*"$1"*ipynb ; mv notebooks/*py notebooks/py_scripts; }
 
 # Notes
 # list=(a b c); for t in ${list[@]}; do pip uninstall $t -y; done
@@ -140,8 +155,5 @@ cdd() { cd ./*"$1"*; }
 
 test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash" || true
 
-# source ${HOME}/.rvm/scripts/rvm # ruby version manager
-rvm --default use 2.7 >/dev/null
-
 # clear
-echo "warpd: A-M-x, A-M-c. hjkl er"
+echo "warpd: A-M-x, A-M-c. hjkl er; jupythis; gb"
