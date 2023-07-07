@@ -1,7 +1,15 @@
 [user]
 	name = CBroz1
-	email = CBroz@DataJoint.com
+	email = CBrozdowski@yahoo.com
 [init]
-	defaultBranch = main
+	defaultBranch = me
 [core]
-	editor = subl
+	editor = "nvim"
+
+# WARNING: must update below when brew updates gh package
+[core]
+  sshCommand = ssh -F ~/.ssh/config 
+[credential "https://github.com"]
+	helper = !/home/linuxbrew/.linuxbrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = !/home/linuxbrew/.linuxbrew/bin/gh auth git-credential

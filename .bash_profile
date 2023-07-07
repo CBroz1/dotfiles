@@ -40,7 +40,7 @@ bind "set show-all-if-unmodified on"
 bind "set completion-ignore-case on"
 bind "set menu-complete-display-prefix on"
 # bind '"\e[A": history-search-backward' # up is auto-completes
-bind '"\e[B": history-search-forward'
+# bind '"\e[B": history-search-forward'
 bind '"\C-h": backward-kill-word'
 set syntax on
 set bell-style visible
@@ -82,7 +82,7 @@ fi
 ## General
 alias o="open ."
 alias l="ls"
-alias ll='ls -aGg --color'
+# alias ll='ls -aGg --color'
 alias ss='subl -a '
 alias python='python3'
 alias v="nvim"
@@ -90,6 +90,7 @@ alias sm='/usr/bin/smerge'
 alias pie="pip list -e | grep 'workf\|elem\|adamacs\|dataj'"
 alias jupysync='jupytext --to py notebooks/0*ipynb; mv notebooks/*py notebooks/py_scripts'
 alias gitexec='git config core.fileMode false'
+alias pbcopy='xclip -selection c -rmlastnl'
 alias bck="echo ' > /dev/null 2>&1 &' | pbcopy"
 alias profile='ss ~/.bash_profile'
 alias profiles='ss ~/.bash_profile'
@@ -97,7 +98,6 @@ alias profilen='nvim ~/.bash_profile'
 alias profilev='nvim ~/.bash_profile'
 alias profilec='code ~/.bash_profile'
 alias loadprofile='source ~/.bash_profile'
-alias matlab="/Applications/MATLAB_R2022a.app/bin/matlab -nojvm -nodesktop"
 alias tmux="TERM=screen-256color-bce tmux"
 alias sp="spotifyd;spt"
 alias spellcheckdir="cspell -c cspell.json ./**/*{py,md,yaml}"
@@ -181,11 +181,15 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "/home/linuxbrew/.linuxbrew/opt/nvm/nvm.sh" ] && \. "/home/linuxbrew/.linuxbrew/opt/nvm/nvm.sh"  # This loads nvm
 [ -s "/home/linuxbrew/.linuxbrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/home/linuxbrew/.linuxbrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
-## zoxide
+# zoxide, thefuck, OpenAI API, fd, sd, exa, ncdu
 eval "$(zoxide init bash)"
-## thefuck
 eval "$(thefuck --alias)"
+source ~/.config/openai_api_key
+alias ll='exa -l --icons --git -a'
+alias lt='exa --tree --level=2 --long --icons --git'
+alias duu='ncdu --color dark'
+alias chat='chatgpt'
 
 # clear
-echo "warpd: A-M-x, A-M-c.; jupythis; gb"
+# echo "warpd: A-M-x, A-M-c.; jupythis; gb"
 

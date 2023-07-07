@@ -3,6 +3,7 @@
 # General
 alias o="open ."
 alias l="ls"
+alias pbcopy='xclip -selection c -rmlastnl'
 alias bck="echo ' > /dev/null 2>&1 &' | pbcopy"
 
 # zsh

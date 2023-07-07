@@ -3,8 +3,8 @@
 DOTFILES=(.bash_profile .gitconfig .gitignore)
 
 #Remove old dotfiles and replace them
-for dotfile in $(echo ${DOTFILES[*]});
+for dotfile in "${DOTFILES[@]}";
 do
-    rm ~/$(echo $dotfile)
-    ln -s ~/dotfiles/$(echo $dotfile) ~/$(echo $dotfile)
+    rm ~/"$dotfile"
+    ln -s ~/dotfiles/"$dotfile" ~/"$dotfile"
 done
