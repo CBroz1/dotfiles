@@ -15,13 +15,17 @@ shopt -s checkwinsize # check window size
 # Random emoji in cmd prompt
 emojis=("🌀" "💀" "👽" "👾" "💜" "🦄" "🐙" "🌸" "🌄" "🎃" "🎆" "🔮" "🧿")
 EMOJI=${emojis[$RANDOM % ${#emojis[@]} ]}
+HOST_FULL=$(hostname)
+HOST_PART=${HOST_FULL:0:3}
 # PS1 needs brackets around to prevent overwrite
-# export PS1="\[$EMOJI \[$(tput setaf 140)\]\W \033[m\]> \]" 
+# export PS1="\[$EMOJI \[$(tput setaf 140)\]\W \033[m\]> \]"
 # -M ' moded' -U ' untrkd' -A ' stgd' -f '[%b%a%m%u]
 git_branch_info () {
    echo -ne "\033[36m$(vcprompt -M ' moded' -U ' untrkd' -A ' stgd' -f '[%b%a] ')\033[m"
 }
-export PS1="$EMOJI \[$(tput setaf 140)\]\W\[\033[m\] > "
+
+# export PS1="$EMOJI \[$(tput setaf 140)\]\W\[\033[m\] > "
+export PS1="$EMOJI \033[36m\$HOST_PART\033[m \[$(tput setaf 140)\]\W\[\033[m\] > "
 # git_branch_info () {
 #    echo -ne "\033[36m$(vcprompt -f '[%b] ')"
 # }
@@ -54,7 +58,7 @@ fi
 
 # complete -C /usr/local/bin/mc mc
 
-# --------------------- OSX ----------------------- 
+# --------------------- OSX -----------------------
 # defaults write com.apple.screencapture disable-shadow -bool true # turn off app shadows
 # export HDF5_DIR=/opt/homebrew/opt/hdf5
 # eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -88,7 +92,7 @@ alias python='python3'
 alias v="nvim"
 alias sm='/usr/bin/smerge'
 alias pie="pip list -e | grep 'workf\|elem\|adamacs\|dataj'"
-alias jupysync='jupytext --to py notebooks/0*ipynb; mv notebooks/*py notebooks/py_scripts'
+alias jupysync='jupytext --to py notebooks/*ipynb; mv notebooks/*py notebooks/py_scripts; black notebooks/py_scripts'
 alias gitexec='git config core.fileMode false'
 alias pbcopy='xclip -selection c -rmlastnl'
 alias bck="echo ' > /dev/null 2>&1 &' | pbcopy"
@@ -115,19 +119,20 @@ alias gcm='git commit -m'
 alias gp='git pull'
 alias grom='git remote rename origin me'
 ## Docker
-alias dockerprune="docker image prune -f; docker volume prune -f; docker builder prune -fa" 
+alias dockerprune="docker image prune -f; docker volume prune -f; docker builder prune -fa"
 alias dockerremove="docker stop $(docker ps -a -q); docker rm $(docker ps -a -q)"
 alias dockerup="docker compose --env-file ./docker/.env -f ./docker/docker-compose*.yaml up --build --force-recreate --detach"
 alias dockerdn="docker compose -f ./docker/docker-compose-test.yaml down --volumes"
 ## Environments
 alias off="conda deactivate"
 alias tmp="off; conda activate tmp" # Temp
-alias pytmp="/Users/cb/miniforge3/envs/tmp/bin/python -m IPython --no-autoindent"
+alias pytmp="/Users/cb/miniconda3/envs/tmp/bin/python -m IPython --no-autoindent"
 alias doa="conda activate doa" # DofA
 alias godoa="cd '${HOME}/fun/TheGame'; conda activate doa"
 alias gospy="cd '${HOME}/wrk/spyglass'; conda activate spy"
-alias pydoa="${HOME}/miniforge3/envs/doa/bin/python -m IPython --no-autoindent -i temp.py"
-alias pympw="${HOME}/miniforge3/envs/mpw/bin/python -m IPython --no-autoindent -i temp.py"
+alias gosrc="cd '${HOME}/wrk/spyglass'; conda activate src"
+alias pydoa="${HOME}/miniconda3/envs/doa/bin/python -m IPython --no-autoindent -i temp.py"
+alias pympw="${HOME}/miniconda3/envs/mpw/bin/python -m IPython --no-autoindent -i temp.py"
 # Ruby
 alias goruby="source ${HOME}/.rvm/scripts/rvm # ruby version manager; rvm --default use 2.7 >/dev/null"
 ## Google drive for linux
@@ -137,18 +142,20 @@ alias syncdrives="rsync -hraP --ignore-existing --delete --exclude '*.Trash-1000
 # --------------------- Functions ---------------------
 piphas() { pip list | grep "$1"; }
 act() { conda activate "$1"; }
-ipy() { /Users/cb/miniforge3/envs/"$1"/bin/python -m IPython --no-autoindent; }
+# ipy() { ${HOME}/miniconda3/envs/"$1"/bin/python -m IPython --no-autoindent --TerminalInteractiveShell.editing_mode=vi; }
+ipy() { ${HOME}/miniconda3/envs/"$1"/bin/python -m IPython --no-autoindent; }
 spellcheck() { cspell check "$1" --color | less -r; }
 jupythis() { jupytext --to py notebooks/*"$1"*ipynb ; mv notebooks/*py notebooks/py_scripts; }
 sf() { ss `fzf-tmux -1 -q $1`; }
 loadenv() { export $(grep -v '^#' ${1:.env} | xargs); }
+scpthis () { scp -i /home/user/.ssh/ucsf -P XXXX user@server:~/wrk/spyglass/"$1" ~/wrk/spyglass/"$1"; }
 
 # Notes
 # list=(a b c); for t in ${list[@]}; do pip uninstall $t -y; done
 # alias fetchall="for f in $(ls -d ele*); do cd ./$f; git fetch --all; sm .; cd ..; done"
 
 # add kernel: ipython kernel install --name "local-venv" --user
-# . /Users/cb/miniforge3/etc/profile.d/conda.sh
+# . /Users/cb/miniconda3/etc/profile.d/conda.sh
 
 # test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash" || true
 
@@ -176,6 +183,44 @@ conda config --set auto_activate_base false
 ## autocomplete for custom commands
 complete -f ss
 
+## fzf command history 
+# Another CTRL-R script to insert the selected command from history into the command line/region
+__fzf_history ()
+{
+    builtin history -a;
+    builtin history -c;
+    builtin history -r;
+    builtin typeset \
+        READLINE_LINE_NEW="$(
+            HISTTIMEFORMAT= builtin history |
+            command fzf +s --tac +m -n2..,.. --tiebreak=index --toggle-sort=ctrl-r |
+            command sed '
+                /^ *[0-9]/ {
+                    s/ *\([0-9]*\) .*/!\1/;
+                    b end;
+                };
+                d;
+                : end
+            '
+        )";
+
+        if
+                [[ -n $READLINE_LINE_NEW ]]
+        then
+                builtin bind '"\er": redraw-current-line'
+                builtin bind '"\e^": magic-space'
+                READLINE_LINE=${READLINE_LINE:+${READLINE_LINE:0:READLINE_POINT}}${READLINE_LINE_NEW}${READLINE_LINE:+${READLINE_LINE:READLINE_POINT}}
+                READLINE_POINT=$(( READLINE_POINT + ${#READLINE_LINE_NEW} ))
+        else
+                builtin bind '"\er":'
+                builtin bind '"\e^":'
+        fi
+}
+
+builtin set -o histexpand;
+builtin bind -x '"\C-x1": __fzf_history';
+builtin bind '"\C-r": "\C-x1\e^\er"'
+
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 export NVM_DIR="$HOME/.nvm"
 [ -s "/home/linuxbrew/.linuxbrew/opt/nvm/nvm.sh" ] && \. "/home/linuxbrew/.linuxbrew/opt/nvm/nvm.sh"  # This loads nvm
@@ -192,4 +237,3 @@ alias chat='chatgpt'
 
 # clear
 # echo "warpd: A-M-x, A-M-c.; jupythis; gb"
-

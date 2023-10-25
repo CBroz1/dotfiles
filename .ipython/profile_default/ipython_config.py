@@ -273,9 +273,8 @@ c.TerminalIPythonApp.display_banner = False
 ## lines of code to run at IPython startup.
 #  See also: InteractiveShellApp.exec_lines
 c.TerminalIPythonApp.exec_lines = [
-    "clear",
-    "print('🌸 python 3.10 🌸')",
-    "try:\n\timport datajoint as dj\n\tprint('🌸  loaded dj  🌸')\nexcept:\n\tpass",
+    "import platform; v=platform.python_version(); print(f'🌸 python {v} 🌸')",
+    # "try:\n\timport datajoint as dj\n\tprint('🌸  loaded dj  🌸')\nexcept:\n\tpass",
 ]
 
 ## A list of dotted module names of IPython extensions to load.
@@ -630,7 +629,7 @@ c.InteractiveShell.banner1 = ""
 
 ## Shortcut style to use at the prompt. 'vi' or 'emacs'.
 #  Default: 'emacs'
-# c.TerminalInteractiveShell.editing_mode = 'emacs'
+c.TerminalInteractiveShell.editing_mode = "vi"
 
 ## Set the editor used by IPython (default to $EDITOR/vi/notepad).
 #  Default: 'vi'
