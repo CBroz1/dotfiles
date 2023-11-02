@@ -230,8 +230,8 @@ export NVM_DIR="$HOME/.nvm"
 eval "$(zoxide init bash)"
 eval "$(thefuck --alias)"
 source ~/.config/openai_api_key
-alias ll='exa -l --icons --git -a'
-alias lt='exa --tree --level=2 --long --icons --git'
+alias ll='eza -l --icons --git -a'
+alias lt='eza --tree --level=2 --long --icons --git'
 alias duu='ncdu --color dark'
 alias chat='chatgpt'
 
