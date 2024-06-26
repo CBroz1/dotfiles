@@ -1,0 +1,292 @@
+{
+    "git.enabled": true,
+    "editor.fontFamily": "Menlo, Monokai, Monaco, 'Courier New', monospace",
+    "editor.rulers": [
+        80
+    ],
+    "editor.lineNumbers": "relative",
+    "editor.tokenColorCustomizations": {
+        "comments": "#8b97b9",
+        "strings": "#bd93f9b7" // Reduced opacity of standard
+    },
+    "editor.defaultFormatter": "ms-python.python",
+    "editor.stickyScroll.enabled": true,
+    "editor.insertSpaces": true,
+    "editor.minimap.enabled": false,
+    "editor.tabCompletion": "on",
+    "explorer.autoReveal": false,
+    "search.useGlobalIgnoreFiles": true,
+    "debug.console.fontSize": 16,
+    // WORKBENCH
+    "workbench.colorTheme": "Dracula",
+    "workbench.editor.highlightModifiedTabs": true,
+    "workbench.colorCustomizations": {
+        "[*Dracula*]": {
+            // "symbolIcon.stringForeground" :  "#bd93f9",
+            // "notebook.focusedCellBackground": "#44475A",
+            // "notebook.outputContainerBorderColor": "#282A36",
+            "editor.background": "#282a36",
+            // "gitDecoration.addedResourceForeground": "#879ab5",
+            // "gitDecoration.conflictingResourceForeground": "#459694",
+            // "gitDecoration.deletedResourceForeground": "#879ab5",
+            // "gitDecoration.ignoredResourceForeground": "#808080",
+            // "gitDecoration.modifiedResourceForeground": "#879ab5",
+            // "gitDecoration.renamedResourceForeground": "#879ab5",
+            // "gitDecoration.stageDeletedResourceForeground": "#879ab5",
+            // "gitDecoration.stageModifiedResourceForeground": "#879ab5",
+            // "gitDecoration.submoduleResourceForeground": "#879ab5",
+            "gitDecoration.untrackedResourceForeground": "#6272A4",
+        },
+        "[NOT ACTIVE]": { // Dracula reference
+            "editorBracketHighlight.foreground1": "#282A36", // Background
+            "editorBracketHighlight.foreground2": "#44475A", // Current Line
+            "editorBracketHighlight.foreground3": "#F8F8F2", // Foreground
+            "editorBracketHighlight.foreground4": "#6272A4", // Comment
+            "editorBracketHighlight.foreground5": "#8BE9FD", // Cyan
+            "editorBracketHighlight.foreground6": "#50FA7B", // Green
+            "terminal.ansiGreen":                 "#FFB86C", // Orange
+            "terminal.ansiCyan":                  "#FF79C6", // Pink
+            "terminal.ansiBlue":                  "#BD93F9", // Purple
+            "terminal.ansiRed":                   "#FF5555", // Red
+            "terminal.ansiYellow":                "#F1FA8C", // Yellow
+        }
+    },
+    "workbench.iconTheme": "file-icons-colourless",
+    // "workbench.preferredDarkColorTheme": "GitHub Dark Dimmed",
+    "workbench.editorAssociations": {
+        "*.ipynb": "jupyter-notebook",
+        "*.so": "default"
+    },
+    "security.workspace.trust.untrustedFiles": "open",
+    // NOTEBOOKS
+    "liveshare.notebooks.allowGuestExecuteCells": true,
+    "liveServer.settings.donotShowInfoMsg": true,
+    "liveServer.settings.donotVerifyTags": true,
+    "jupyter.askForKernelRestart": false,
+    "jupyter.widgetScriptSources": [
+        "jsdelivr.com",
+        "unpkg.com"
+    ],
+    "notebook.output.textLineLimit": 15,
+    "notebook.lineNumbers": "on",
+    // GIT & Source control
+    "git.autofetch": true,
+    "git.ignoreLegacyWarning": true,
+    "git.repositoryScanIgnoredFolders": [
+        "node_modules",
+        "ref/*",
+        "zArchive/*",
+        "Broz_StimManip",
+        "DeepLabCut",
+        "datajoint-utilities",
+        "datajoint-python",
+        "datajoint-matlab",
+        "djarchive-client",
+        "datajoint-elements",
+        "elements-position-paper"
+    ],
+    "scm.countBadge": "off",
+    "scm.repositories.sortOrder": "path",
+    "scm.inputFontSize": 16,
+    // SPELL
+    "cSpell.language": "en,en-US,aws,companies,python,python-common,latex,public-licenses,softwareTerms",
+    "cSpell.maxDuplicateProblems": 2,
+    "cSpell.spellCheckDelayMs": 500,
+    "cSpell.userWords": [
+        "arange",
+        "CICD",
+        "datajoint",
+        "dotenv",
+        "longblob",
+        "mkdocs",
+        "nbins",
+        "ndarray",
+        "ndimage",
+        "paramset",
+        "paramsets",
+        "plotly",
+        "preds",
+        "randn",
+        "recreationally",
+        "scipy",
+        "segmentations",
+        "sess",
+        "vline",
+        "xanchor",
+        "xaxes",
+        "xaxis",
+        "yaxes",
+        "yaxis",
+        "yref"
+    ],
+    "cSpell.enableFiletypes": [
+        "!elixir",
+        "!java",
+        "!json",
+        "!jsonc",
+        "!typescript",
+        "!typescriptreact",
+        "!vue",
+        "markdown",
+        "yaml",
+        "python"
+    ],
+    "cSpell.logLevel": "Warning",
+    // TERMINAL & FILES
+    "terminal.integrated.inheritEnv": false,
+    "terminal.integrated.fontSize": 13,
+    "terminal.external.osxExec": "iTerm.app",
+    "files.autoSave": "onFocusChange",
+    "files.associations": {
+        "*m": "matlab",
+        "*/.env": "bash",
+        ".env": "shellscript",
+        "*.json": "jsonc"
+    },
+    "files.exclude": {
+        "**/.git/": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/Thumbs.db": true,
+        ".prettierrc": true,
+        "*output*/*log": true,
+        "*output*/*aux": true,
+        "**/.D*": true,
+        "**/*.code-workspace": true,
+        "**/__pycache__*": true,
+        "**/.ipynb_checkpoints": true,
+        "**/.pytest_cache": true,
+        "**/.coverage*": true,
+        "**/*egg-info": true,
+        "**/build": true,
+        "**/node_modules/": true,
+        "**/.vscode": true,
+        "**/.gitignore": true,
+        "**/.markdownlint*": true,
+        "**/.pre-com*": true,
+        "**/CHANGEL*": true,
+        "**/CONTRIB*": true,
+        "**/CODE_OF*": true,
+        "**/*xml": true,
+        "**/*cspell*": true,
+        "**/gendoc*": true,
+        "**/images/": true,
+        "**/LICENS*": true,
+        "**/licens*": true,
+        "**/pyproj*": true,
+        "**/setup*": true,
+        "**/package*json": true,
+        "**/README*": true,
+        "**/*requirement*": true,
+        "**/*MANIFEST*": true,
+        "**/.ruff_cache/": true,
+        "**/.git_archival.txt": true,
+        "END": true
+    },
+    "files.trimTrailingWhitespace": false,
+    // MATLAB & OTHERs
+    // "matlab.mlintpath": "/Applications/MATLAB_R2022a.app/bin/maci64/mlint",
+    // "matlab.linterConfig": "/Applications/MATLAB_R2022a.app/bin/maci64/MLintSettings.txt",
+    // "[MATLAB]": {
+    //     "editor.formatOnSave": true,
+    //     "editor.defaultFormatter": "AffenWiesel.matlab-formatter"
+    // },
+    "prettier.documentSelectors": ["**/*.HTML"],
+    "html.format.contentUnformatted": "",
+    "[html]": {
+        "editor.formatOnSave": true,
+        // "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[yaml]": {
+        // "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    // MARKDOWN
+    "[markdown]": {
+    "editor.defaultFormatter": "DavidAnson.vscode-markdownlint",
+        "editor.formatOnSave": true,
+        // "editor.formatOnPaste": true
+    },
+    "editor.codeActionsOnSave": {
+        "source.fixAll.markdownlint": "explicit"
+    },
+    "markdown.preview.fontSize": 16,
+    "markdown.extension.list.indentationSize": "inherit",
+    // PYTHON
+    "python.languageServer": "Pylance",
+    "pylint.path": [
+        // "/usr/bin/pylint"
+        "~/.local/bin/pylint"
+    ],
+    "pylint.args": [
+        "--load-plugins=datajoint_linter",
+        "--permit-dj-filepath=y",
+        "--disable=E0401,E0102,W0621,W0401,W0611,W0614"
+    ],
+    "python.linting.flake8CategorySeverity.E": "Hint",
+    "python.analysis.autoImportCompletions": false,
+    "python.formatting.provider": "black",
+    "python.defaultInterpreterPath": "/home/cb/miniconda3/envs/slc",
+    "python.formatting.blackArgs": [
+        "--line-length=80",
+        "--exclude='.env'"
+    ],
+    "black-formatter.args": [
+        "--line-length=80",
+        "--exclude='.env'"
+    ],
+    // "black-formatter.path": "/opt/homebrew/bin/black",
+    "python.terminal.activateEnvironment": false,
+    "python.terminal.launchArgs": [
+        "-m",
+        "IPython",
+        "--no-autoindent",
+    ],
+    "[python]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "ms-python.python"
+    },
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportUnboundVariable": "none",
+        "reportGeneralTypeIssues": "none",
+        "reportOptionalMemberAccess": "none",
+    },
+    "notebook.formatOnSave.enabled":true,
+    "json.schemas": [
+    ],
+    "node-module-intellisense.scanFileModules": false,
+    "[latex]": {
+        "editor.quickSuggestions": {
+            "comments": "off",
+            "strings": "off",
+            "other": "off"
+        }
+    },
+    // DRAWIO
+    "hediet.vscode-drawio.codeLinkActivated": true,
+    "hediet.vscode-drawio.theme": "dark",
+    // OTHERS
+    "rewrap.reformat": true,
+    "rewrap.wrappingColumn": 80,
+    "terminal.integrated.defaultProfile.osx": "bash",
+    "git.enableSmartCommit": true,
+    "diffEditor.ignoreTrimWhitespace": false,
+    "explorer.confirmDelete": false,
+    "editor.lineHeight": 0,
+    "editor.fontSize": 15,
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "cSpell.enabled": false,
+    "codeium.enableSearch": true,
+    "codeium.enableConfig": {
+        "*": true,
+        "python": false
+    },
+    "vim.cursorStylePerMode.normal": "block-outline",
+    "vim.statusBarColors.insert": "#BD93F9",
+    "vim.statusBarColors.normal": "#8BE9FD",
+    "window.zoomLevel": 1,
+    "git.openRepositoryInParentFolders": "always",
+    "github.copilot.editor.enableAutoCompletions": true,
+}

@@ -1,0 +1,391 @@
+// Place your key bindings in this file to override the defaultsauto[]
+// ~/Libray/Application\ Support/Code/User/keybindings.json
+
+[
+    // VIM ---------------------------------------------------------------------------
+    {
+        "key": "ctrl+alt+v",
+        "command": "toggleVim"
+    },
+    // multiline editing ---------------------------------------------------------------
+    {
+        "key": "ctrl+3",
+        "command": "-workbench.action.openEditorAtIndex3"
+    },
+    {
+        "key": "ctrl+3",
+        "command": "-workbench.action.focusThirdEditorGroup"
+    },
+    {
+        "key": "ctrl+3",
+        "command": "editor.action.selectHighlights",
+        "when": "editorFocus"
+    },
+    // Notebooks
+    {
+        "key": "ctrl+shift+/",
+        "command": "notebook.cell.split",
+        "when": "editorTextFocus && inputFocus && notebookEditorFocused"
+    },
+    {
+        "key": "ctrl+shift+o",
+        "command": "notebook.cell.clearOutputs",
+        "when": "notebookEditorFocused"
+    },
+    {
+        "key": "ctrl+0",
+        "command": "-fontshortcuts.resetEditorFontSize",
+        "when": "editorFocus"
+    },
+    {
+        "key": "ctrl+0",
+        "command": "-fontshortcuts.resetTerminalFontSize",
+        "when": "terminalFocus"
+    },
+    {
+        "key": "ctrl+0",
+        "command": "jupyter.restartkernel",
+        "when": "notebookEditorFocused"
+    },
+    {
+        "key": "ctrl+shift+0",
+        "command": "jupyter.restartkernelandrunallcells",
+        "when": "notebookEditorFocused"
+    },
+    {
+        "key": "ctrl+f10",
+        "command": "jupyter.restartkernelandrunuptoselectedcell"
+    },
+    // Markdown ------------------------------------------------------------------------
+    {
+        "key": "ctrl+e", // use ctrl+p
+        "command": "-workbench.action.quickOpen"
+    },
+    {
+        "key": "ctrl+shift+cmd+s",
+        "command": "cSpell.toggleEnableSpellChecker"
+    },
+    // Windows -------------------------------------------------------------------------
+    {
+        "key": "ctrl+k F14", // OSX Sets an alternative so cmd+h hide works
+        "command": "testing.toggleTestingPeekHistory"
+    },
+    // Python --------------------------------------------------------------------------
+    {
+        "key": "ctrl+alt+l",
+        "command": "python.enableLinting"
+    },
+    // Terminal ------------------------------------------------------------------------
+    {
+        "key": "alt+backspace",
+        "command": "-workbench.action.terminal.deleteWordLeft",
+        "when": "terminalFocus"
+    },
+    {
+        "key": "alt+backspace",
+        "command": "workbench.action.terminal.deleteWordPartLeft",
+        "when": "terminalFocus"
+    },
+    {
+        "key": "ctrl+alt+`",
+        "command": "workbench.action.toggleMaximizedPanel",
+        "when": "!terminalFocus"
+    },
+    {
+        "key": "ctrl+`",
+        "command": "workbench.action.terminal.focus",
+        "when": "!terminalFocus"
+    },
+    {
+        "key": "ctrl+`",
+        "command": "workbench.action.focusActiveEditorGroup",
+        "when": "terminalFocus"
+    },
+    {
+        "key": "ctrl+`",
+        "command": "-workbench.action.terminal.toggleTerminal",
+        "when": "terminal.active"
+    },
+    {
+        "key": "ctrl+1",
+        "command": "workbench.action.focusFirstEditorGroup",
+        "when": "terminalFocus"
+    },
+    {
+        "key": "delete",
+        "command": "-workbench.action.terminal.killInstance",
+        "when": "terminalHasBeenCreated && terminalTabsFocus || terminalIsOpen && terminalTabsFocus || terminalProcessSupported && terminalTabsFocus"
+    },
+    {
+        "key": "ctrl+w",
+        "command": "workbench.action.terminal.kill",
+        "when": "terminalFocus"
+    },
+    {
+        "key": "ctrl+shift+q",
+        "command": "workbench.action.terminal.sendSequence",
+        "args": {
+            "text": "quit\u000D"
+        },
+        "when": "terminal.active"
+    },
+    {
+        "key": "alt+shift+5", // ?
+        "command": "workbench.action.terminal.split",
+        "when": "terminalFocus && terminalProcessSupported || terminalFocus && terminalWebExtensionContributedProfile"
+    },
+    // Migrate terminal ----------------------------------------------------------------
+    {
+        "key": "ctrl+k left",
+        "command": "-views.moveViewLeft",
+        "when": "focusedView != ''"
+    },
+    {
+        "key": "ctrl+k down",
+        "command": "-workbench.action.moveActiveEditorGroupDown"
+    },
+    {
+        "key": "ctrl+k down",
+        "command": "workbench.action.positionPanelBottom"
+    },
+    {
+        "key": "ctrl+k up",
+        "command": "-workbench.action.moveActiveEditorGroupUp"
+    },
+    {
+        "key": "ctrl+k up",
+        "command": "workbench.action.closePanel"
+    },
+    {
+        "key": "ctrl+k right",
+        "command": "-workbench.action.moveActiveEditorGroupRight"
+    },
+    {
+        "key": "ctrl+k right",
+        "command": "-views.moveViewRight",
+        "when": "focusedView != ''"
+    },
+    {
+        "key": "ctrl+k right",
+        "command": "workbench.action.positionPanelRight"
+    },
+    // Settings ------------------------------------------------------------------------
+    {
+        "key": "cmd+alt+,",
+        "command": "workbench.action.openSettingsJson",
+    },
+    {
+        "key": "cmd+alt+k cmd+alt+s",
+        "command": "workbench.action.terminal.sendSequence",
+        "args": {
+            "text": "code '~/.config/Code/User/keybindings.json'\u000D"
+        }
+    },
+    // Toggle -------------------------------------------------------------------------
+    {
+        "key": "ctrl+alt+b",
+        "command": "-workbench.action.toggleAuxiliaryBar"
+    },
+    {
+        "key": "cmd+ctrl+b", // req toggle extension
+        "command": "toggle",
+        "when": "editorTextFocus",
+        "args": {
+            "id": "toggleFormatOnSave",
+            "value": [
+            {
+            "workbench.statusBar.visible": true,
+            "[python]": {
+                    "editor.formatOnSave": true,
+                    "editor.defaultFormatter": "ms-python.python"
+                },
+
+            },
+            {
+                "workbench.statusBar.visible": false,
+                "[python]": {
+                    "editor.formatOnSave": false,
+                    "editor.defaultFormatter": "ms-python.python"
+                },
+            }
+            ]
+        }
+    },
+    {
+        "key": "ctrl+alt+e", //req toggle extension
+        "command": "toggle",
+        "when": "editorTextFocus",
+        "args": {
+            "id": "toggleBoilerVisible",
+            "value": [
+            {
+            "files.exclude": {
+                "**/.git/": true,
+                "**/.svn": true,
+                "**/.hg": true,
+                "**/CVS": true,
+                "**/Thumbs.db": true,
+                ".prettierrc": true,
+                "*output*/*log": true,
+                "*output*/*aux": true,
+                "**/.D*": true,
+                "**/*.code-workspace": true,
+                "**/__pycache__*": true,
+                "**/.ipynb_checkpoints": true,
+                "**/.pytest_cache": true,
+                "**/.coverage*": true,
+                "**/*egg-info": true,
+                "**/build": true,
+                "**/node_modules/": true,
+                "**/.vscode": true,
+                "**/.gitignore": true,
+                "**/.markdownlint*": true,
+                "**/.pre-com*": true,
+                "**/CHANGEL*": true,
+                "**/CONTRIB*": true,
+                "**/CODE_OF*": true,
+                "**/*xml": true,
+                "**/*cspell*": true,
+                "**/gendoc*": true,
+                "**/images/": true,
+                "**/LICENS*": true,
+                "**/licens*": true,
+                "**/pyproj*": true,
+                "**/setup*": true,
+                "**/package*json": true,
+                "**/README*": true,
+                "**/*requirement*": true,
+                "**/*MANIFEST*": true,
+                "**/.ruff_cache/": true,
+                "**/.git_archival.txt": true,
+                "END": true
+                }
+            },
+            {
+                "files.exclude": {
+                    "**/.git/": true,
+                    "**/.svn": true,
+                    "**/.hg": true,
+                    "**/CVS": true,
+                    "**/Thumbs.db": true,
+                    ".prettierrc": true,
+                    "*output*/*log": true,
+                    "*output*/*aux": true,
+                    "**/.D*": true,
+                    "**/*.code-workspace": true,
+                    "**/__pycache__*": true,
+                    "**/.ipynb_checkpoints": true,
+                    "**/.pytest_cache": true,
+                    "**/.coverage*": true,
+                    "**/*egg-info": true,
+                    "**/build": true,
+                    "**/node_modules/": true,
+                    "**/.ruff_cache/": true,
+                    }
+            }
+            ]
+        }
+    },
+    // Move by 10 ----------------------------------------------------------------------
+    {
+        "key": "ctrl+alt+up",
+        "command": "cursorMove",
+        "args": {
+            "to": "up",
+            "by": "line",
+            "value": 10
+        },
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "ctrl+alt+down",
+        "command": "cursorMove",
+        "args": {
+            "to": "down",
+            "by": "line",
+            "value": 10
+        },
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "ctrl+alt+shift+up",
+        "command": "cursorMove",
+        "args": {
+            "to": "up",
+            "by": "line",
+            "select": true,
+            "value": 10
+        },
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "ctrl+alt+shift+down",
+        "command": "cursorMove",
+        "args": {
+            "to": "down",
+            "by": "line",
+            "select": true,
+            "value": 10
+        },
+        "when": "editorTextFocus"
+    },
+        {
+        "key": "ctrl+shift+alt+down",
+        "command": "-editor.action.copyLinesDownAction",
+        "when": "editorTextFocus && !editorReadonly"
+    },
+    {
+        "key": "ctrl+shift+alt+up",
+        "command": "-editor.action.copyLinesUpAction",
+        "when": "editorTextFocus && !editorReadonly"
+    },
+    {
+        "key": "ctrl+shift+c",
+        "command": "-workbench.action.terminal.openNativeConsole",
+        "when": "!terminalFocus"
+    },
+    {
+        "key": "alt+i",
+        "command": "workbench.action.terminal.focusPreviousPane",
+        "when": "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
+    },
+    {
+        "key": "alt+e",
+        "command": "workbench.action.terminal.focusNextPane",
+        "when": "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
+    },
+    {
+        "key": "ctrl+shift+alt+d",
+        "command": "workbench.view.debug",
+        "when": "viewContainer.workbench.view.debug.enabled"
+    },
+    {
+        "key": "ctrl+shift+d",
+        "command": "-workbench.view.debug",
+        "when": "viewContainer.workbench.view.debug.enabled"
+    },
+    {
+        "key": "ctrl+shift+d",
+        "command": "editor.action.copyLinesDownAction"
+    },
+    {
+        "key": "ctrl+shift+u",
+        "command": "editor.action.insertCursorAtEndOfEachLineSelected",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "ctrl+shift+q",
+        "command": "rewrap.rewrapComment",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "ctrl+]",
+        "command": "-editor.action.indentLines",
+        "when": "editorTextFocus && !editorReadonly"
+    },
+    {
+        "key": "ctrl+]",
+        "command": "editor.action.inlineSuggest.commit",
+        "when": "inlineSuggestionHasIndentationLessThanTabSize && inlineSuggestionVisible && !editorHoverFocused && !editorTabMovesFocus && !suggestWidgetVisible"
+    },
+]
