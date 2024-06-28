@@ -105,10 +105,12 @@ alias loadprofile='source ~/.bash_profile'
 alias tmux="TERM=screen-256color-bce tmux"
 alias sp="spotifyd;spt"
 alias spellcheckdir="cspell -c cspell.json ./**/*{py,md,yaml}"
-alias precommitcheck="pre-commit run --all-files"
+alias pcc="pre-commit run --all-files"
 alias mdlcheck="goruby; mdl -c .markdownlint.yaml ."
 alias killvlc="killall -s 9 vlc"
 alias killfort="killall -s 9 forticlient" # or  fctsched, fortitray, fortitraylaunch
+alias todo="clear; awk 'BEGIN {found=0} found==0 && NF>0 {print; next} {found=1; exit}' ~/wrk/ucsf-notes.txt"
+alias vdo="v ~/wrk/ucsf-notes.txt"
 ## Git
 alias gb="vcprompt -M ' moded' -U ' untrkd' -A ' stgd' -f '[%b%a%m%u]'"
 # alias gb='git_branch_info'
@@ -119,15 +121,19 @@ alias gcm='git commit -m'
 alias gp='git pull'
 alias grom='git remote rename origin me'
 ## Docker
+# alias dockerls='docker ps -a --format "{{.ID}} {{.Status}} {{.Names}}" | awk "{print \$1, \$2, substr(\$3, 1, 50)}"'
+# alias dockerls='docker ps -a --format "{{.ID}} {{.Status}} {{.Names}}" | awk "{print \$1, \$2, substr(\$3, 1, 80)}"'
 alias dockerprune="docker image prune -f; docker volume prune -f; docker builder prune -fa"
 alias dockerremove="docker stop $(docker ps -a -q); docker rm $(docker ps -a -q)"
 alias dockerup="docker compose --env-file ./docker/.env -f ./docker/docker-compose*.yaml up --build --force-recreate --detach"
 alias dockerdn="docker compose -f ./docker/docker-compose-test.yaml down --volumes"
+alias dockermirr="docker run --name mirr -p 3309:3306 -e MYSQL_ROOT_PASSWORD=tutorial datajoint/mysql:8.0"
 ## Environments
 alias off="conda deactivate"
 alias tmp="off; conda activate tmp" # Temp
 alias pytmp="/Users/cb/miniconda3/envs/tmp/bin/python -m IPython --no-autoindent"
 alias doa="conda activate doa" # DofA
+alias gofud="cd '${HOME}/fun/cookbook'; conda activate doa"
 alias godoa="cd '${HOME}/fun/TheGame'; conda activate doa"
 alias gospy="cd '${HOME}/wrk/spyglass'; conda activate spy"
 alias gosrc="cd '${HOME}/wrk/spyglass'; conda activate src"
@@ -140,15 +146,23 @@ alias mountgoog="rclone -v --vfs-cache-mode writes mount goog: ~/goog/"
 alias mountmpw="sudo mount -t cifs -o credentials=/home/cb/.config/mpw_credentials //192.168.75.6/Network /media/cb/mpw/"
 alias syncdrives="rsync -hraP --ignore-existing --delete --exclude '*.Trash-1000' /media/cb/all/ /media/cb/bck/"
 # --------------------- Functions ---------------------
+alias funcs="declare -F | grep -vE \"^declare -f _|^declare -f nvm\""
 piphas() { pip list | grep "$1"; }
-act() { conda activate "$1"; }
+cact() { conda activate "$1"; }
 # ipy() { ${HOME}/miniconda3/envs/"$1"/bin/python -m IPython --no-autoindent --TerminalInteractiveShell.editing_mode=vi; }
 ipy() { ${HOME}/miniconda3/envs/"$1"/bin/python -m IPython --no-autoindent; }
 spellcheck() { cspell check "$1" --color | less -r; }
 jupythis() { jupytext --to py notebooks/*"$1"*ipynb ; mv notebooks/*py notebooks/py_scripts; }
-sf() { ss `fzf-tmux -1 -q $1`; }
+vf() { v `fzf-tmux -1 -q $1`; }
 loadenv() { export $(grep -v '^#' ${1:.env} | xargs); }
-scpthis () { scp -i /home/user/.ssh/ucsf -P XXXX user@server:~/wrk/spyglass/"$1" ~/wrk/spyglass/"$1"; }
+scpthis() { scp -i /home/user/.ssh/ucsf -P 7777 cbroz@virga-05.cin.ucsf.edu:~/wrk/spyglass/"$1" ~/wrk/spyglass/"$1"; }
+dockerrm() {
+    for container_id in "$@"; do
+        docker stop "$container_id" >/dev/null 2>&1
+        docker rm "$container_id" >/dev/null 2>&1
+        echo "Container $container_id stopped and removed"
+    done
+}
 
 # Notes
 # list=(a b c); for t in ${list[@]}; do pip uninstall $t -y; done
@@ -230,6 +244,7 @@ export NVM_DIR="$HOME/.nvm"
 eval "$(zoxide init bash)"
 eval "$(thefuck --alias)"
 source ~/.config/openai_api_key
+source ~/.config/box_cred_key
 alias ll='eza -l --icons --git -a'
 alias lt='eza --tree --level=2 --long --icons --git'
 alias duu='ncdu --color dark'
@@ -237,3 +252,4 @@ alias chat='chatgpt'
 
 # clear
 # echo "warpd: A-M-x, A-M-c.; jupythis; gb"
+. "$HOME/.cargo/env"
