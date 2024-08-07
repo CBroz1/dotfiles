@@ -123,7 +123,10 @@ alias grom='git remote rename origin me'
 ## Docker
 # alias dockerls='docker ps -a --format "{{.ID}} {{.Status}} {{.Names}}" | awk "{print \$1, \$2, substr(\$3, 1, 50)}"'
 # alias dockerls='docker ps -a --format "{{.ID}} {{.Status}} {{.Names}}" | awk "{print \$1, \$2, substr(\$3, 1, 80)}"'
-alias dockerprune="docker image prune -f; docker volume prune -f; docker builder prune -fa"
+alias dockerprune="\
+  docker container prune -f;\
+  docker image prune -af;\
+  docker builder prune -f"
 alias dockerremove="docker stop $(docker ps -a -q); docker rm $(docker ps -a -q)"
 alias dockerup="docker compose --env-file ./docker/.env -f ./docker/docker-compose*.yaml up --build --force-recreate --detach"
 alias dockerdn="docker compose -f ./docker/docker-compose-test.yaml down --volumes"
@@ -155,7 +158,8 @@ spellcheck() { cspell check "$1" --color | less -r; }
 jupythis() { jupytext --to py notebooks/*"$1"*ipynb ; mv notebooks/*py notebooks/py_scripts; }
 vf() { v `fzf-tmux -1 -q $1`; }
 loadenv() { export $(grep -v '^#' ${1:.env} | xargs); }
-scpthis() { scp -i /home/user/.ssh/ucsf -P 7777 cbroz@virga-05.cin.ucsf.edu:~/wrk/spyglass/"$1" ~/wrk/spyglass/"$1"; }
+scpdown() { scp -i /home/user/.ssh/ucsf -P XXXX cbroz@virga-05.cin.ucsf.edu:~/wrk/spyglass/"$1" ~/wrk/spyglass/"$1"; }
+scpup() { scp -i /home/user/.ssh/ucsf -P XXXX ~/wrk/spyglass/"$1" cbroz@virga-05.cin.ucsf.edu:~/wrk/spyglass/"$1"; }
 dockerrm() {
     for container_id in "$@"; do
         docker stop "$container_id" >/dev/null 2>&1
@@ -197,7 +201,7 @@ conda config --set auto_activate_base false
 ## autocomplete for custom commands
 complete -f ss
 
-## fzf command history 
+## fzf command history
 # Another CTRL-R script to insert the selected command from history into the command line/region
 __fzf_history ()
 {
@@ -249,6 +253,8 @@ alias ll='eza -l --icons --git -a'
 alias lt='eza --tree --level=2 --long --icons --git'
 alias duu='ncdu --color dark'
 alias chat='chatgpt'
+alias g='z'
+alias ff='fzf'
 
 # clear
 # echo "warpd: A-M-x, A-M-c.; jupythis; gb"

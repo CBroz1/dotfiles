@@ -1,28 +1,45 @@
 import os
 import sys
+from pathlib import Path
 
+# from IPython import get_ipython
 from IPython.terminal.prompts import Prompts, Token
 
 CONDA = os.getenv("CONDA_DEFAULT_ENV", "")
 DATABASE = ""
+CONNECTED = False
 
-if len(sys.argv) > 1 and CONDA.lower() in ["spy", "src"]:
+if len(sys.argv) > 1 and CONDA.lower() in ["spy", "src", "slc"]:
     import datajoint as dj
 
     DATABASE = sys.argv[1]
     print("Connecting to database: ", DATABASE)
-    dj_conf_name = (
+    dj_conf_path = Path(
         f"dj_local_conf.json_{DATABASE}"
         if DATABASE.lower() not in [0, "none"]
         else "dj_local_conf.json"
     )
+    if not dj_conf_path.exists():
+        dj_conf_path = Path("~/wrk/alt/creds/").expanduser() / dj_conf_path
+
     try:
-        dj.config.load(dj_conf_name)
+        dj.config.load(dj_conf_path)
         dj.conn()
         DATABASE += " "
+        CONNECTED = True
     except:  # noqa E722
-        print("Failed to connect to database: ", DATABASE)
+        print("Failed to connect to  : ", DATABASE)
         DATABASE = ""
+
+if CONNECTED and DATABASE[:4].lower() not in ["prod", "prob", ""]:
+    try:
+        from datajoint_utilities.dj_search.lists import drop_schemas
+
+        def drop_all_schemas(prefix="", dry_run=True, force_drop=True):
+            drop_schemas(prefix, dry_run=dry_run, force_drop=force_drop)
+
+    except ImportError:
+        pass
 
 
 class MyPrompt(Prompts):
