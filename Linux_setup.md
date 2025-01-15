@@ -56,7 +56,7 @@ cd ~/dotfiles
 - [Slack deb](https://slack.com/downloads/instructions/linux?ddl=1&build=deb)
 - [Pulse deb](http://webdev.web3.technion.ac.il/docs/cis/public/ssl-vpn/ps-pulse-ubuntu-debian.deb)
 - [Pika Backup](https://flathub.org/apps/org.gnome.World.PikaBackup)
-- [Linux Brew](https://brew.sh/)
+- [Linux Brew](https://brew.sh/) - removed from config for now
 - [Miniconda](https://docs.anaconda.com/miniconda/install/)
 - [Docker](https://docs.docker.com/engine/install/ubuntu/)
 - Sublime

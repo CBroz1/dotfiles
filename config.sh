@@ -1,5 +1,5 @@
 #! /bin/bash
-DOTFILES=(.bash_profile .gitconfig .gitignore .mdlcr .tmux.conf .vimrc .zshrc)
+DOTFILES=(.bash_profile .gitconfig .gitignore .mdlcr .tmux.conf .vimrc .zshrc .xbindkeysrc)
 
 #Remove old dotfiles and replace them
 for dotfile in "${DOTFILES[@]}";
@@ -10,7 +10,6 @@ done
 
 sudo apt update -y
 sudo apt install $(cat ./install_scripts/apt_installs_pop.txt) -y
-# xargs brew install < ./install_scripts/brew_installs_pop.txt
 sudo npm install saltthepass
 
 gsettings set org.gnome.desktop.background picture-options 'none'

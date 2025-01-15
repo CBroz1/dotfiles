@@ -1,7 +1,7 @@
 bat
-gh
 code
 ffmpeg
+gh
 gnome-tweaks
 gpg
 imagemagick
@@ -19,8 +19,10 @@ tex-gyre
 texinfo
 texlive
 texlive-xetex
+thefuck
 tmux
 vlc
+xautomation
+xbindkeys
 xclip
 zoxide
-thefuck
