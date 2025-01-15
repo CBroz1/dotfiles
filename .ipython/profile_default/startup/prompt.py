@@ -2,17 +2,18 @@ import os
 import sys
 from pathlib import Path
 
-# from IPython import get_ipython
 from IPython.terminal.prompts import Prompts, Token
 
 CONDA = os.getenv("CONDA_DEFAULT_ENV", "")
 DATABASE = ""
 CONNECTED = False
 
-if len(sys.argv) > 1 and CONDA.lower() in ["spy", "src", "slc"]:
+if len(sys.argv) > 1:
+    DATABASE = sys.argv[1]
+
+if DATABASE and CONDA.lower() in ["spy", "src", "slc"]:
     import datajoint as dj
 
-    DATABASE = sys.argv[1]
     print("Connecting to database: ", DATABASE)
     dj_conf_path = Path(
         f"dj_local_conf.json_{DATABASE}"
@@ -42,6 +43,7 @@ if CONNECTED and DATABASE[:4].lower() not in ["prod", "prob", ""]:
         pass
 
 
+# WON'T WORK WITH PYTHON 3.10
 class MyPrompt(Prompts):
     def in_prompt_tokens(self):
         vi = self.vi_mode().strip("[]")[0].upper() + " "

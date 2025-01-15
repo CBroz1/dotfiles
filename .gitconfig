@@ -5,11 +5,6 @@
 	defaultBranch = me
 [core]
 	editor = "nvim"
-
-# WARNING: must update below when brew updates gh package
-[core]
-  sshCommand = ssh -F ~/.ssh/config 
 [credential "https://github.com"]
-	helper = !/home/linuxbrew/.linuxbrew/bin/gh auth git-credential
-[credential "https://gist.github.com"]
-	helper = !/home/linuxbrew/.linuxbrew/bin/gh auth git-credential
+	helper = 
+	helper = !/usr/bin/gh auth git-credential

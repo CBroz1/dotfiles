@@ -1,0 +1,8 @@
+black
+ctags
+fzf
+ghostscript
+lazygit
+ripgrep
+thefuck
+tree-sitter

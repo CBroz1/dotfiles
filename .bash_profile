@@ -1,10 +1,10 @@
-# TODO: parameterize user
-
 # --------------------- Path ---------------------
 export PATH="/usr/local/bin:$PATH"
-export PATH="/home/cb/.local/bin/:$PATH"
-export PATH="/usr/local/texlive/2023/bin/PLATFORM:$PATH"
+export PATH="/home/$USER/.local/bin/:$PATH"
+export PATH="/usr/local/texlive/2024/bin/PLATFORM:$PATH"
+export PATH="/usr/local/texlive/2025/bin/PLATFORM:$PATH"
 export PYENV_ROOT="$HOME/.pyenv"
+source ~/.nvm/nvm.sh
 
 # --------------------- Settings ---------------------
 # shopt -s autocd # if give path only, assume cd, need bash upgrade
@@ -91,20 +91,12 @@ alias dockermirr="docker run --name mirr -p 3309:3306 -e MYSQL_ROOT_PASSWORD=tut
 ## Environments
 alias off="conda deactivate"
 alias tmp="off; conda activate tmp" # Temp
-alias pytmp="/Users/cb/miniconda3/envs/tmp/bin/python -m IPython --no-autoindent"
-alias doa="conda activate doa" # DofA
-alias gofud="cd '${HOME}/fun/cookbook'; conda activate doa"
-alias godoa="cd '${HOME}/fun/TheGame'; conda activate doa"
+alias pytmp="/Users/$USER/miniconda3/envs/tmp/bin/python -m IPython --no-autoindent"
 alias gospy="cd '${HOME}/wrk/spyglass'; conda activate spy"
-alias gosrc="cd '${HOME}/wrk/spyglass'; conda activate src"
-alias pydoa="${HOME}/miniconda3/envs/doa/bin/python -m IPython --no-autoindent -i temp.py"
-alias pympw="${HOME}/miniconda3/envs/mpw/bin/python -m IPython --no-autoindent -i temp.py"
 # Ruby
 alias goruby="source ${HOME}/.rvm/scripts/rvm # ruby version manager; rvm --default use 2.7 >/dev/null"
 ## Google drive for linux
-alias mountgoog="rclone -v --vfs-cache-mode writes mount goog: ~/goog/"
-alias mountmpw="sudo mount -t cifs -o credentials=/home/cb/.config/mpw_credentials //192.168.75.6/Network /media/cb/mpw/"
-alias syncdrives="rsync -hraP --ignore-existing --delete --exclude '*.Trash-1000' /media/cb/all/ /media/cb/bck/"
+alias syncdrives="rsync -hraP --ignore-existing --delete --exclude '*.Trash-1000' /media/$USER/all/ /media/$USER/bck/"
 # --------------------- Functions ---------------------
 alias funcs="declare -F | grep -vE \"^declare -f _|^declare -f nvm\""
 piphas() { pip list | grep "$1"; }
@@ -127,18 +119,18 @@ dockerrm() {
 # Notes
 # list=(a b c); for t in ${list[@]}; do pip uninstall $t -y; done
 # add kernel: ipython kernel install --name "local-venv" --user
-# . /Users/cb/miniconda3/etc/profile.d/conda.sh
+# . /Users/$USER/miniconda3/etc/profile.d/conda.sh
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/cb/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+__conda_setup="$('/home/$USER/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "/home/cb/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/cb/miniconda3/etc/profile.d/conda.sh"
+    if [ -f "/home/$USER/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/$USER/miniconda3/etc/profile.d/conda.sh"
     else
-        export PATH="/home/cb/miniconda3/bin:$PATH"
+        export PATH="/home/$USER/miniconda3/bin:$PATH"
     fi
 fi
 unset __conda_setup
@@ -186,21 +178,19 @@ builtin set -o histexpand;
 builtin bind -x '"\C-x1": __fzf_history';
 builtin bind '"\C-r": "\C-x1\e^\er"'
 
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+# eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
 export NVM_DIR="$HOME/.nvm"
 [ -s "/home/linuxbrew/.linuxbrew/opt/nvm/nvm.sh" ] && \. "/home/linuxbrew/.linuxbrew/opt/nvm/nvm.sh"  # This loads nvm
 [ -s "/home/linuxbrew/.linuxbrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/home/linuxbrew/.linuxbrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
-# zoxide, thefuck, OpenAI API, fd, sd, exa, ncdu
-eval "$(zoxide init bash)"
-eval "$(thefuck --alias)"
-source ~/.config/openai_api_key
-source ~/.config/box_cred_key
+# zoxide, thefuck, fd, sd, exa, ncdu
+eval "$(zoxide init bash)" || true
+eval "$(thefuck --alias)" || true
+source ~/.config/*key
 alias ll='eza -l --icons --git -a'
 alias lt='eza --tree --level=2 --long --icons --git'
 alias duu='ncdu --color dark'
-alias chat='chatgpt'
 alias g='z'
 alias ff='fzf'
-
-. "$HOME/.cargo/env"
+alias bat='batcat'

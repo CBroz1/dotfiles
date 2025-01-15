@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Move to /home/$USER/.local/bin
+
 # Initialize variables
 ret_out=false
 # Parse options
@@ -16,10 +18,10 @@ while getopts ":o" opt; do
 done
 shift $((OPTIND -1))
 
-DOM="${1:-SpecialCase}"
-full=$(saltthepass -p master_pass -d $DOM)
-part=${full:0:20} # Truncate to 20 characters
-if [ $DOM == "SpecialCase" ]; then
+DOM="${1:-$SALT_DOUBLE}"
+full=$(saltthepass -h $SALT_HASHER -p $SALT_MASTER -d $DOM)
+part=${full:0:$SALT_LENGTH}
+if [ $DOM == $SALT_DOUBLE ]; then
   part=${part}${part}
 fi
 
@@ -28,4 +30,3 @@ if [ $ret_out == true ]; then
 else
   echo $part | xclip -selection c -rmlastnl
 fi
-
