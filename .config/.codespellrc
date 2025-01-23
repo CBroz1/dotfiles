@@ -1,0 +1,4 @@
+[codespell]
+skip = *.po,*.ts,~/.config/.cspell_words.txt 
+count =
+quiet-level = 3

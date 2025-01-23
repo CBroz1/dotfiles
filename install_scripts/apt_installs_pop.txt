@@ -1,5 +1,8 @@
 bat
-code
+gparted
+hfsprogs
+exfatprogs
+moc
 ffmpeg
 gh
 gnome-tweaks
@@ -13,6 +16,7 @@ pyflakes3
 pylint
 python3
 python3.10
+python3-pip
 rclone
 tex-common
 tex-gyre

@@ -3,7 +3,6 @@
 code --install-extension bierner.markdown-mermaid
 code --install-extension bpruitt-goddard.mermaid-markdown-syntax-highlighting
 code --install-extension charliermarsh.ruff
-code --install-extension codeium.codeium
 code --install-extension cstrap.python-snippets
 code --install-extension davidanson.vscode-markdownlint
 code --install-extension donjayamanne.python-environment-manager
@@ -42,4 +41,3 @@ code --install-extension streetsidesoftware.code-spell-checker
 code --install-extension visualstudioexptteam.intellicode-api-usage-examples
 code --install-extension visualstudioexptteam.vscodeintellicode
 code --install-extension vscodevim.vim
-code --install-extension vstirbu.vscode-mermaid-preview

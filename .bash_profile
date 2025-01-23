@@ -106,8 +106,8 @@ spellcheck() { cspell check "$1" --color | less -r; }
 jupythis() { jupytext --to py notebooks/*"$1"*ipynb ; mv notebooks/*py notebooks/py_scripts; }
 vf() { v `fzf-tmux -1 -q $1`; }
 loadenv() { export $(grep -v '^#' ${1:.env} | xargs); }
-scpdown() { scp -i /home/user/.ssh/ucsf -P XXXX cbroz@virga-05.cin.ucsf.edu:~/wrk/spyglass/"$1" ~/wrk/spyglass/"$1"; }
-scpup() { scp -i /home/user/.ssh/ucsf -P XXXX ~/wrk/spyglass/"$1" cbroz@virga-05.cin.ucsf.edu:~/wrk/spyglass/"$1"; }
+scpdown() { scp -i /home/user/.ssh/ucsf -P ${UCSF_SSH_PORT} cbroz@virga-05.cin.ucsf.edu:~/wrk/spyglass/"$1" ~/wrk/spyglass/"$1"; }
+scpup() { scp -i /home/user/.ssh/ucsf -P ${UCSF_SSH_PORT} ~/wrk/spyglass/"$1" cbroz@virga-05.cin.ucsf.edu:~/wrk/spyglass/"$1"; }
 dockerrm() {
     for container_id in "$@"; do
         docker stop "$container_id" >/dev/null 2>&1
@@ -187,7 +187,6 @@ export NVM_DIR="$HOME/.nvm"
 # zoxide, thefuck, fd, sd, exa, ncdu
 eval "$(zoxide init bash)" || true
 eval "$(thefuck --alias)" || true
-source ~/.config/*key
 alias ll='eza -l --icons --git -a'
 alias lt='eza --tree --level=2 --long --icons --git'
 alias duu='ncdu --color dark'

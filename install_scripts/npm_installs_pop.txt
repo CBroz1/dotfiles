@@ -1,0 +1,4 @@
+saltthepass
+cspell
+markdownlint-cli
+emoj
