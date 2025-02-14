@@ -1,0 +1,53 @@
+#!/bin/bash
+# AUTHOR: chris brozdowski
+# DATE: 2025-02-14
+#
+# Sanitize filenames in the current directory by removing special characters and
+# replacing spaces with underscores. Use `-n` to perform a dry run without
+# renaming files.
+
+# Function to sanitize a filename
+sanitize_name() {
+    local name="$1"
+    local extension=""
+
+    # Extract the file extension if it exists
+    if [[ "$name" == *.* ]]; then
+        extension=".${name##*.}"  # Get the extension (including the dot)
+        name="${name%.*}"         # Remove the extension from the name
+    fi
+
+    # Replace spaces with underscores
+    name="${name// /_}"
+
+    # Remove all characters except alphanumeric, underscore, and hyphen (excluding extension)
+    name="${name//[^a-zA-Z0-9_-]/}"
+
+    # Reattach the extension
+    echo "$name$extension"
+}
+
+# Check for dry-run option
+dry_run=false
+while getopts "n" opt; do
+    case "$opt" in
+        n) dry_run=true ;;
+        *) echo "Usage: $0 [-n]" ; exit 1 ;;
+    esac
+done
+
+# Loop through all files in the current directory
+for file in *; do
+    if [ -f "$file" ]; then  # Check if it's a file
+        new_name=$(sanitize_name "$file")
+        if [ "$file" != "$new_name" ]; then
+            if [ "$dry_run" = true ]; then
+                echo "[Dry Run] Would rename: $file -> $new_name"
+            else
+                mv "$file" "$new_name"
+                echo "Renamed: $file -> $new_name"
+            fi
+        fi
+    fi
+done
+

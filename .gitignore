@@ -1,6 +1,7 @@
 node_modules/
+package*.json
 .DS_Store
 temp*
-.zcompdump 
-.zsh_history 
+.zcompdump
+.zsh_history
 unused

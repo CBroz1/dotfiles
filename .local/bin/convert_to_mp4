@@ -1,0 +1,72 @@
+#!/bin/bash
+
+# Array to store converted files for deletion prompt
+converted_files=()
+
+# Default behavior: convert videos
+AUDIO_MODE=false
+
+# Check for the -audio flag
+if [[ "$1" == "-audio" ]]; then
+    AUDIO_MODE=true
+    shift  # Remove the flag from arguments
+fi
+
+# Define the directory to search (default to current directory)
+BASE_DIR="${1:-.}"
+
+# Select file types based on mode
+if [[ "$AUDIO_MODE" == true ]]; then
+    EXTENSIONS=(-iname "*.wav" -o -iname "*.flac" -o -iname "*.aac" -o -iname "*.ogg" -o -iname "*.m4a")
+    OUTPUT_EXT="mp3"
+    CODEC=(-codec:a libmp3lame -qscale:a 2)
+else
+    EXTENSIONS=(-iname "*.avi" -o -iname "*.mkv" -o -iname "*.mov")
+    OUTPUT_EXT="mp4"
+    CODEC=(-c:v libx264 -crf 23 -preset medium -c:a aac -b:a 192k)
+fi
+
+# Process files
+find "$BASE_DIR" -type f \( "${EXTENSIONS[@]}" \) | while IFS= read -r file; do
+    dir=$(dirname "$file")
+    base=$(basename "$file")
+    name="${base%.*}"
+    output="$dir/$name.$OUTPUT_EXT"
+
+    echo $file
+
+    # Skip if output file already exists
+    if [[ -f "$output" ]]; then
+        echo "Skipping: $output already exists"
+        continue
+    fi
+
+    # Convert using ffmpeg
+    echo "Converting: $file to $output"
+    ffmpeg -n -hide_banner -loglevel error -i "$file" "${CODEC[@]}" "$output"
+
+    # Check success
+    if [[ $? -eq 0 ]]; then
+        echo "Successfully converted: $file to $output"
+        converted_files+=("$file")
+    else
+        echo "Failed to convert: $file"
+    fi
+done
+
+# Prompt user to delete converted files
+if [[ ${#converted_files[@]} -gt 0 ]]; then
+  echo -n "Do you want to delete the original files? (y/n): "
+  read -r response
+  if [[ "$response" == "y" || "$response" == "Y" ]]; then
+    for file in "${converted_files[@]}"; do
+      rm -f "$file"
+      echo "Deleted $file"
+    done
+  else
+    echo "Original files not deleted."
+  fi
+else
+  echo "No video files were converted."
+fi
+

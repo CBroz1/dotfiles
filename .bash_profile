@@ -1,14 +1,16 @@
 # --------------------- Path ---------------------
 export PATH="/usr/local/bin:$PATH"
 export PATH="/home/$USER/.local/bin/:$PATH"
-export PATH="/usr/local/texlive/2024/bin/PLATFORM:$PATH"
-export PATH="/usr/local/texlive/2025/bin/PLATFORM:$PATH"
+export PATH="/usr/local/texlive/2024/bin/x86_64-linux:$PATH"
 export PYENV_ROOT="$HOME/.pyenv"
 source ~/.nvm/nvm.sh
 
 # --------------------- Settings ---------------------
 # shopt -s autocd # if give path only, assume cd, need bash upgrade
 shopt -s checkwinsize # check window size
+set -o vi # vi mode
+export EDITOR='nvim'
+set show-mode-in-prompt on
 
 # Random emoji in cmd prompt
 emojis=("🌀" "💀" "👽" "👾" "💜" "🦄" "🐙" "🌸" "🌄" "🎃" "🎆" "🔮" "🧿")
