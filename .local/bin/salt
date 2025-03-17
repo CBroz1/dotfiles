@@ -2,12 +2,18 @@
 
 # Move to /home/$USER/.local/bin
 
+# Check variables
+if [[ -z "${SALT_HASHER}" || -z "${SALT_MASTER}" || -z $SALT_LENGTH ]]; then
+    echo "Error: SALT_HASHER, SALT_MASTER, or SALT_LENGTH is not set." >&2
+    exit 1
+fi
+
 # Initialize variables
 ret_out=false
 # Parse options
 while getopts ":o" opt; do
   case ${opt} in
-    o )
+    o ) # `salt -o domain` will output the salt to stdout
       ret_out=true
       ;;
     \? )
@@ -24,6 +30,7 @@ part=${full:0:$SALT_LENGTH}
 if [ $DOM == $SALT_DOUBLE ]; then
   part=${part}${part}
 fi
+
 
 if [ $ret_out == true ]; then
   echo $part

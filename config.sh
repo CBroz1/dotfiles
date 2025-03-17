@@ -10,6 +10,7 @@
 # 5. Links files in dotfiles to home directory by relative path
 
 # apt installs
+sudo add-apt-repository ppa:libreoffice/ppa
 sudo apt update -y > /dev/null
 sudo apt install $(cat ./install_scripts/apt_installs_pop.txt) -y > /dev/null
 sudo npm install saltthepass > /dev/null

@@ -10,6 +10,14 @@ cd ~/dotfiles
 ./config.sh
 ```
 
+In order to run `sbin` scripts directly as sudo, add `~/.local/sbin` to the
+secure path in `/etc/sudoers`:
+
+```bash
+sudo update-alternatives --config editor # change sudo editor
+sudo visudo
+```
+
 ## Navigation
 
 - Window tiler
@@ -42,9 +50,9 @@ cd ~/dotfiles
     - Remove pocket
   - [DarkReader Dracula](https://github.com/Dpbm/Dracula-DarkReader)
     - Background --> #282a36
-    - BackgroText --> #f8f8f2
-    - BackgroScrollbar --> custom --> #6272a4
-    - BackgroSelection --> custom: --> #44475a
+    - Foreground --> #f8f8f2
+    - Scrollbar --> custom --> #6272a4
+    - Selection --> custom --> #44475a
 - Gmail sign in
 
 ## Programs
@@ -67,11 +75,13 @@ cd ~/dotfiles
 - [pika Backup](https://flathub.org/apps/org.gnome.World.PikaBackup)
 - [pulse deb](http://webdev.web3.technion.ac.il/docs/cis/public/ssl-vpn/ps-pulse-ubuntu-debian.deb)
 - [slack deb](https://slack.com/downloads/instructions/linux?ddl=1&build=deb)
+- [spotify](https://www.spotify.com/us/download/linux/)
+- [steam](https://store.steampowered.com/about/)
 - sublime
   - [Text](https://www.sublimetext.com/docs/linux_repositories.html)
   - [Merge](https://www.sublimemerge.com/docs/linux_repositories)
   - Enter respective licenses
-  - Install package controll and dracula theme, switch theme
+  - Install package control and dracula theme, switch theme
   - [Merge theme](https://github.com/facelessuser/merge-dracula-theme)
   - Edit color scheme, add global: `"fold_marker": "#bd93f9"`
 - [tlmgr init-usertree](https://tug.org/texlive/upgrade.html)
@@ -87,10 +97,6 @@ cd ~/dotfiles
 
 ## Misc
 
-- [mocp config](https://wiki.archlinux.org/title/MOC#Configuration)
-  - `cp /usr/share/doc/moc/examples/config.example ~/.moc/config`
-  - set theme to [alldefault](https://github.com/wimstefan/mocp-themes/blob/master/alldefault)
-  - download linked theme to `~/.moc/themes/`
 - Dracula theme
   - [gnome-terminal](https://draculatheme.com/gnome-terminal) (TODO: is moving dircolors file enough?)
   - [vim](https://draculatheme.com/vim)

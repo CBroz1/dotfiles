@@ -7,7 +7,9 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # -------------------- Secrets --------------------
-source ~/.config/*key
+for key_file in ~/.config/*key; do
+    [ -f "$key_file" ] && source "$key_file"
+done
 
 # -------------------- Profile --------------------
 # Source .bash_profile if it exists
