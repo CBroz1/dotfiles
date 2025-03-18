@@ -17,11 +17,20 @@ done
 shopt -s checkwinsize # check window size
 set -o vi # vi mode
 set show-mode-in-prompt on
-export EDITOR='nvim'
 set syntax on
 set bell-style visible
 set filec
 
+if [ -f ~/nvim.appimage ]; then
+    export EDITOR="~/nvim.appimage -c \"lua require('configs')\""
+    alias v="~/nvim.appimage -c \"lua require('configs')\""
+else
+    alias v='nvim'
+    export EDITOR='nvim'
+fi
+
+shopt -s histappend
+HISTCONTROL=ignoreboth
 export HISTSIZE=100000
 export HISTFILESIZE=100000
 export BASH_SILENCE_DEPRECATION_WARNING=1
@@ -54,7 +63,6 @@ export LSCOLORS=ExFxBxDxCxegedabagacad
 
 alias o="open ."
 alias l="ls"
-alias v="nvim"
 alias ss='subl -a '
 alias sm='/usr/bin/smerge'
 alias python='python3'
@@ -185,17 +193,27 @@ fi
 if command -v zoxide &>/dev/null; then
   eval "$(zoxide init bash)"
   alias g='z'
+else
+  alias g='echo "zoxide not installed"; cd'
 fi
 if command -v thefuck &>/dev/null; then
   eval "$(thefuck --alias)" || true
+  alias fuck='thefuck'
+else
+  alias fuck='echo "no fucks to give"'
 fi
 if command -v eza &>/dev/null; then
   alias ll='eza -l --icons --git -a'
   alias lt='eza --tree --level=2 --long --icons --git'
+else
+  alias ll='ls -l --color=auto'
+  alias lt='tree -L 2'
 fi
 if command -v ncdu &>/dev/null; then
   alias duu='ncdu --color dark'
 fi
 if command -v batcat &>/dev/null; then
   alias bat='batcat'
+else
+  alias bat='echo "batcat not installed"; cat'
 fi
