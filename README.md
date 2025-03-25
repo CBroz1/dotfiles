@@ -104,3 +104,7 @@ sudo visudo
 - Tweaks (installed via apt)
   - Appearance -> Applications -> Dracula
   - Startup applications: Firefox, Slack
+- More Appearance: Download to `~/.themes` or `~/.icons`, then select in Tweaks
+  - [Flatery icons](https://www.gnome-look.org/p/1332404)
+  - [Shell UI](https://www.pling.com/p/1253385/)
+  - [Cursor](https://www.gnome-look.org/p/1355701/)

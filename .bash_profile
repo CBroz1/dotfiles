@@ -78,6 +78,7 @@ alias tm='tmux has-session -t 0 2>/dev/null && TERM=screen-256color-bce tmux att
 alias spellcheckdir="cspell -c cspell.json ./**/*{py,md,yaml}"
 alias pcc="pre-commit run --all-files"
 alias mdlcheck="goruby; mdl -c .markdownlint.yaml ."
+alias ptest="pytest --no-teardown --pdb --sw"
 
 ## Git
 alias ga='git add'

@@ -14,7 +14,8 @@ if ! sudo -n true 2>/dev/null; then
     echo "Please rerun as sudo to install packages"
 else
     # Apt installs
-    sudo add-apt-repository ppa:libreoffice/ppa
+    sudo add-apt-repository ppa:libreoffice/ppa > /dev/null # libreoffice
+    sudo add-apt-repository ppa:deadsnakes/ppa > /dev/null # python versions
     sudo apt update -y > /dev/null
     sudo apt install $(cat ./install_scripts/apt_installs_pop.txt) -y > /dev/null
     sudo npm install saltthepass > /dev/null

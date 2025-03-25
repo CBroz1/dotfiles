@@ -10,6 +10,7 @@ imagemagick
 img2pdf
 latexmk
 moc
+neofetch
 neovim
 npm
 pyflakes3
