@@ -1,0 +1,6 @@
+{   // https://github.com/facelessuser/merge-dracula-theme
+    "name": "Dracula",
+    "extends": "Dracula.hidden-theme",
+    "variables": {},
+    "rules": []
+}

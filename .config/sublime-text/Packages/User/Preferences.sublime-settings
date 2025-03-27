@@ -1,0 +1,11 @@
+{
+	"ignored_packages":
+	[
+		"Vintage",
+	],
+	"color_scheme": "Packages/Dracula Color Scheme/Dracula.tmTheme",
+	"font_size": 19,
+	"theme": "Default Dark.sublime-theme",
+	"index_files": true,
+	"rulers": [80],
+}
