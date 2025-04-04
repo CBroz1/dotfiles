@@ -1,4 +1,5 @@
 bat
+shfmt
 exfatprogs
 ffmpeg
 gh
