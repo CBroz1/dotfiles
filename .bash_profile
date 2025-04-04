@@ -105,6 +105,10 @@ loadenv() { export $(grep -v '^#' ${1:.env} | xargs); }
 scpdown() { scp -i /home/user/.ssh/ucsf -P ${UCSF_SSH_PORT} cbroz@virga-05.cin.ucsf.edu:~/wrk/spyglass/"$1" ~/wrk/spyglass/"$1"; }
 scpup() { scp -i /home/user/.ssh/ucsf -P ${UCSF_SSH_PORT} ~/wrk/spyglass/"$1" cbroz@virga-05.cin.ucsf.edu:~/wrk/spyglass/"$1"; }
 killbyname() { killall -s 9 "$1"; }
+lt_git_ignore() {
+  ignored=$(git ls-files --others --ignored --exclude-standard)
+  lt | grep -vFf <(echo "$ignored")
+}
 
 # ------------------------ Docker ------------------------
 if command -v docker &>/dev/null; then
@@ -206,9 +210,11 @@ fi
 if command -v eza &>/dev/null; then
   alias ll='eza -l --icons --git -a'
   alias lt='eza --tree --level=2 --long --icons --git'
+  alias lg='eza --tree --level=2 --long --icons --git --git-ignore'
 else
   alias ll='ls -l --color=auto'
   alias lt='tree -L 2'
+  alias lg='lt_git_ignore'
 fi
 if command -v ncdu &>/dev/null; then
   alias duu='ncdu --color dark'
