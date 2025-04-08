@@ -16,6 +16,8 @@ from pathlib import Path
 
 from IPython.terminal.prompts import Prompts, Token
 
+DATABASE = ""
+
 
 def get_creds_file(db):
     """Get the path to the credentials file for the database."""
@@ -28,15 +30,17 @@ def get_creds_file(db):
             return creds_file
 
 
-DATABASE = ""
-if len(sys.argv) > 1:
-    DATABASE = sys.argv[1]
-    # print("Database              : ", DATABASE)
+def connect_to_database():
+    """Connect to the database using DataJoint."""
+    DATABASE = ""
+    if len(sys.argv) > 1:
+        DATABASE = sys.argv[1]
 
+    CONNECTED = False
+    HAS_DATAJOINT = importlib_util.find_spec("datajoint") is not None
+    if not (DATABASE and HAS_DATAJOINT):
+        return False
 
-CONNECTED = False
-HAS_DATAJOINT = importlib_util.find_spec("datajoint") is not None
-if DATABASE and HAS_DATAJOINT:
     import datajoint as dj
 
     dj_conf_path = get_creds_file(DATABASE)
@@ -52,12 +56,28 @@ if DATABASE and HAS_DATAJOINT:
         print("Error message         : ", e)
         DATABASE = ""
 
-HAS_DJ_UTILS = importlib_util.find_spec("datajoint_utilities") is not None
-if CONNECTED and DATABASE[:3].lower() != "pro" and HAS_DJ_UTILS:
+    return DATABASE
+
+
+def add_drop_all_func(DATABASE=None):
+    HAS_DJ_UTILS = importlib_util.find_spec("datajoint_utilities") is not None
+
+    if not DATABASE or DATABASE[:3].lower() == "pro" or not HAS_DJ_UTILS:
+        return
+
     from datajoint_utilities.dj_search.lists import drop_schemas
 
     def drop_all_schemas(prefix="", dry_run=True, force_drop=True):
         drop_schemas(prefix, dry_run=dry_run, force_drop=force_drop)
+
+    return drop_all_schemas
+
+
+database = connect_to_database()
+if database:
+    import datajoint as dj
+
+    drop_all_schemas = add_drop_all_func(database)
 
 
 # WON'T WORK WITH PYTHON 3.10
