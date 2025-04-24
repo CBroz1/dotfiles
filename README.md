@@ -59,6 +59,7 @@ sudo visudo
 
 - [code](https://code.visualstudio.com/docs/?dv=linux64_deb): apt version is
     outdated. VSCode rejects soft linked config files
+- [discord](https://discord.com/api/download?platform=linux&format=deb)
 - [docker](https://docs.docker.com/engine/install/ubuntu/)
 - [gnome extensions](https://extensions.gnome.org/)
   - Clipboard indicator (toggle the menu: Ctrl+Super+V)
@@ -98,7 +99,7 @@ sudo visudo
 ## Misc
 
 - Dracula theme
-  - [gnome-terminal](https://draculatheme.com/gnome-terminal) (TODO: is moving dircolors file enough?)
+  - [gnome-terminal](https://draculatheme.com/gnome-terminal)
   - [vim](https://draculatheme.com/vim)
   - [gtk](https://draculatheme.com/gtk)
 - Tweaks (installed via apt)

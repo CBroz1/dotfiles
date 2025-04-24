@@ -1,1 +1,3 @@
 style "#{File.dirname(__FILE__)}/.config/mdl/line_length_80.rb"
+
+rule 'MD007', :indent => 4

@@ -21,9 +21,10 @@ set syntax on
 set bell-style visible
 set filec
 
-if [ -f ~/nvim.appimage ]; then
-    export EDITOR="~/nvim.appimage -c \"lua require('configs')\""
-    alias v="~/nvim.appimage -c \"lua require('configs')\""
+nvim_appimage=$(find ${HOME} -maxdepth 1 -name nvim*appimage 2>/dev/null)
+if [ -n "$nvim_appimage" ]; then
+    alias v="$nvim_appimage -c \"lua require('configs')\""
+    export EDITOR="$nvim_appimage -c \"lua require('configs')\""
 else
     alias v='nvim'
     export EDITOR='nvim'
@@ -100,7 +101,6 @@ cact() { conda activate "$1"; }
 ipy() { ${HOME}/miniconda3/envs/"$1"/bin/python -m IPython --no-autoindent; }
 spellcheck() { cspell check "$1" --color | less -r; }
 jupythis() { jupytext --to py notebooks/*"$1"*ipynb ; mv notebooks/*py notebooks/py_scripts; }
-vf() { v `fzf-tmux -1 -q $1`; }
 loadenv() { export $(grep -v '^#' ${1:.env} | xargs); }
 scpdown() { scp -i /home/user/.ssh/ucsf -P ${UCSF_SSH_PORT} cbroz@virga-05.cin.ucsf.edu:~/wrk/spyglass/"$1" ~/wrk/spyglass/"$1"; }
 scpup() { scp -i /home/user/.ssh/ucsf -P ${UCSF_SSH_PORT} ~/wrk/spyglass/"$1" cbroz@virga-05.cin.ucsf.edu:~/wrk/spyglass/"$1"; }
@@ -185,6 +185,7 @@ if command -v fzf &>/dev/null; then
   builtin bind -x '"\C-x1": __fzf_history';
   builtin bind '"\C-r": "\C-x1\e^\er"'
   alias ff='fzf'
+  alias vf='v $(ff)'
 fi
 
 # ------------------------------------ NVM ------------------------------------

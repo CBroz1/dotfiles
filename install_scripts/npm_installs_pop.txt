@@ -1,4 +1,6 @@
-saltthepass
 cspell
-markdownlint-cli
 emoj
+fixjson
+git-open
+markdownlint-cli
+saltthepass
