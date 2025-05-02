@@ -121,6 +121,7 @@ if command -v docker &>/dev/null; then
     docker volume prune -f; \
     docker run --cap-add=sys_nice \
     --name mirr -p 3309:3306 -e MYSQL_ROOT_PASSWORD=tutorial mysql:latest"
+  alias dockerps="docker ps -a --format \"{{.ID}} {{.Names}}\""
   dockerrm() {
       for container_id in "$@"; do
           docker stop "$container_id" >/dev/null 2>&1
@@ -150,6 +151,7 @@ conda config --set auto_activate_base false
 # ------------------------------------ fzf ------------------------------------
 # CTRL-R script to insert command from history into the command line/region
 if command -v fzf &>/dev/null; then
+  export FZF_DEFAULT_COMMAND='ag -g ""'
   __fzf_history ()
   {
       builtin history -a;

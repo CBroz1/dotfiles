@@ -17,7 +17,9 @@ else
     sudo add-apt-repository ppa:libreoffice/ppa > /dev/null # libreoffice
     sudo add-apt-repository ppa:deadsnakes/ppa > /dev/null # python versions
     sudo apt update -y > /dev/null
-    sudo apt install $(cat ./install_scripts/apt_installs_pop.txt) -y > /dev/null
+    # grep/sed below allow for comments in the file
+    sudo apt install $(grep -v '^\s*#' ./install_scripts/apt_installs_pop.txt \
+      | sed 's/\s*#.*//' | tr '\n' ' ') -y > /dev/null
     sudo npm install saltthepass > /dev/null
 
     # npm
