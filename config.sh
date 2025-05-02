@@ -14,8 +14,8 @@ if ! sudo -n true 2>/dev/null; then
     echo "Please rerun as sudo to install packages"
 else
     # Apt installs
-    sudo add-apt-repository ppa:libreoffice/ppa > /dev/null # libreoffice
-    sudo add-apt-repository ppa:deadsnakes/ppa > /dev/null # python versions
+    sudo add-apt-repository ppa:libreoffice/ppa -y > /dev/null # libreoffice
+    sudo add-apt-repository ppa:deadsnakes/ppa -y > /dev/null # python versions
     sudo apt update -y > /dev/null
     # grep/sed below allow for comments in the file
     sudo apt install $(grep -v '^\s*#' ./install_scripts/apt_installs_pop.txt \
@@ -37,7 +37,9 @@ fi
 
 
 # Python installs
-if command -v pip &> /dev/null; then
+if sudo -n true 2>/dev/null; then
+    echo "Please rerun as user (not sudo) to install pip packages"
+elif command -v pip &> /dev/null; then
     pip install --upgrade pip > /dev/null 2>&1
     pip install -r ./install_scripts/py_installs_pop.txt > /dev/null 2>&1
 else
@@ -58,8 +60,8 @@ git ls-files --exclude-standard | while read file; do # ignore .gitignore files
     if ! [ -f "$target" ]; then
         echo "ADD  $PWD/$file → $target"
         ln -s "$PWD/$file" "$target"
-    elif [[ "$file" == *git* || "$file" == *gh* ]]; then
-        echo "SKIP $PWD/$file → $target"
+    # elif [[ "$file" == *git* || "$file" == *gh* ]]; then
+    #     echo "SKIP $PWD/$file → $target"
     else
         echo "REPL $PWD/$file → $target"
         rm "$target" || true
