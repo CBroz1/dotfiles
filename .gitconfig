@@ -8,13 +8,13 @@
 [github]
 	user = cbroz1
 [credential "https://github.com"]
-	helper = 
 	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = !/usr/bin/gh auth git-credential
+[credential]
+	helper = store
 [safe]
 	directory = /home/dgramling/Src/dpg_nwb_analysis
 	directory = /home/jguidera/Src/nwb_custom_analysis
 	directory = /home/shijiegu/Documents/spyglass
 	directory = /home/jguidera/Src/jguides_2024
-[credential "https://gist.github.com"]
-	helper = 
-	helper = !/usr/bin/gh auth git-credential
