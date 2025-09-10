@@ -54,8 +54,12 @@ complete -f ss # autocomplete for custom commands
 # ----------------------------------- Prompt -----------------------------------
 emojis=("🌀" "💀" "👽" "👾" "💜" "🦄" "🐙" "🌸" "🌄" "🎃" "🎆" "🔮" "🧿")
 EMOJI=${emojis[$RANDOM % ${#emojis[@]} ]}
-HOST_FULL=$(hostname)
-HOST_PART=${HOST_FULL:0:3}
+H=$(hostname -s)
+if [[ $H == "virga"* ]]; then
+  HOST_PART="vi${H:7}"
+else
+  HOST_PART=${H:0:3}
+fi
 export PS1="\[\e[0m\]$EMOJI \[\e[36m\]$HOST_PART\[\e[0m\] \[\e[38;5;140m\]\W\[\e[0m\] > "
 export PS2=">"
 export CLICOLOR=1
