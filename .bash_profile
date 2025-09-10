@@ -199,10 +199,12 @@ else
 fi
 
 # ------------------------------------ NVM ------------------------------------
-\. "$HOME/.nvm/nvm.sh"
-if command -v nvm &>/dev/null; then
-  source ~/.nvm/nvm.sh
-  export NVM_DIR="$HOME/.nvm"
+if [ -d "$HOME/.nvm" ] && [ -s "$HOME/.nvm/nvm.sh" ]; then
+  \. "$HOME/.nvm/nvm.sh"
+  if command -v nvm &>/dev/null; then
+    source ~/.nvm/nvm.sh
+    export NVM_DIR="$HOME/.nvm"
+  fi
 fi
 
 # ----------------------------------- Tools -----------------------------------
