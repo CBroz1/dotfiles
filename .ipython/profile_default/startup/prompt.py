@@ -44,7 +44,7 @@ def connect_to_database():
     import datajoint as dj
 
     dj_conf_path = get_creds_file(DATABASE)
-    print("Credentials file      : ", dj_conf_path)
+    print("Credentials file               : ", dj_conf_path)
 
     try:
         dj.config.load(dj_conf_path)
@@ -75,7 +75,6 @@ def add_drop_all_func(DATABASE=None):
 
 database = connect_to_database()
 if database:
-    import datajoint as dj
 
     drop_all_schemas = add_drop_all_func(database)
 

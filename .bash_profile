@@ -24,6 +24,7 @@ set filec
 nvim_appimage=$(find ${HOME} -maxdepth 1 -name nvim*appimage 2>/dev/null)
 if [ -n "$nvim_appimage" ]; then
     alias v="$nvim_appimage -c \"lua require('configs')\""
+    alias nvim="$nvim_appimage -c \"lua require('configs')\""
     export EDITOR="$nvim_appimage -c \"lua require('configs')\""
 else
     alias v='nvim'
@@ -146,12 +147,16 @@ else
 fi
 unset __conda_setup
 # <<< conda initialize <<<
-conda config --set auto_activate_base false
+if command -v conda &>/dev/null; then
+  conda config --set auto_activate false
+fi
 
 # ------------------------------------ fzf ------------------------------------
 # CTRL-R script to insert command from history into the command line/region
 if command -v fzf &>/dev/null; then
-  export FZF_DEFAULT_COMMAND='ag -g ""'
+  if command -v ag &>/dev/null; then
+    export FZF_DEFAULT_COMMAND='ag -g ""'
+  fi
   __fzf_history ()
   {
       builtin history -a;
@@ -188,9 +193,13 @@ if command -v fzf &>/dev/null; then
   builtin bind '"\C-r": "\C-x1\e^\er"'
   alias ff='fzf'
   alias vf='v $(ff)'
+else
+  alias ff='echo "fzf not found"'
+  alias vf='echo "fzf not found"'
 fi
 
 # ------------------------------------ NVM ------------------------------------
+\. "$HOME/.nvm/nvm.sh"
 if command -v nvm &>/dev/null; then
   source ~/.nvm/nvm.sh
   export NVM_DIR="$HOME/.nvm"
