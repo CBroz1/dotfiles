@@ -7,10 +7,11 @@ export PATH="/usr/local/bin:$PATH"
 export PATH="/home/$USER/.local/bin/:$PATH"
 export PATH="/usr/local/texlive/2024/bin/x86_64-linux:$PATH"
 export PYENV_ROOT="$HOME/.pyenv"
+export LUA_CPATH=";;"
 
 # ---------------------------------- Secrets ----------------------------------
 for key_file in ~/.config/*key; do
-    [ -f "$key_file" ] && source "$key_file"
+    source "$key_file"
 done
 
 # ---------------------------------- Settings ----------------------------------
@@ -68,7 +69,7 @@ alias l="ls"
 alias ss='subl -a '
 alias sm='/usr/bin/smerge'
 alias python='python3'
-alias jupysync='jupytext --to py notebooks/*ipynb; mv notebooks/*py notebooks/py_scripts; black notebooks/py_scripts'
+alias jupysync='jupytext --to py:light notebooks/*ipynb; mv notebooks/*py notebooks/py_scripts; black notebooks/py_scripts'
 alias profilev='nvim ~/.bash_profile'
 alias loadprofile='source ~/.bash_profile'
 
@@ -80,6 +81,11 @@ alias tm='tmux has-session -t 0 2>/dev/null && TERM=screen-256color-bce tmux att
 alias spellcheckdir="cspell -c cspell.json ./**/*{py,md,yaml}"
 alias pcc="pre-commit run --all-files"
 alias mdlcheck="goruby; mdl -c .markdownlint.yaml ."
+
+## Python
+alias pip='python -m pip'
+alias ipython='python -m IPython'
+alias pytest='python -m pytest'
 alias ptest="pytest --no-teardown --pdb --sw"
 
 ## Git
@@ -155,7 +161,9 @@ fi
 # CTRL-R script to insert command from history into the command line/region
 if command -v fzf &>/dev/null; then
   if command -v ag &>/dev/null; then
-    export FZF_DEFAULT_COMMAND='ag -g ""'
+    export FZF_DEFAULT_COMMAND='ag -g "" --ignore "trainset"'
+  else
+    export FZF_DEFAULT_COMMAND='--ignore "trainset"'
   fi
   __fzf_history ()
   {
