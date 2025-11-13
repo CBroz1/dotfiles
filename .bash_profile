@@ -5,9 +5,11 @@
 # ------------------------------------ Path ------------------------------------
 export PATH="/usr/local/bin:$PATH"
 export PATH="/home/$USER/.local/bin/:$PATH"
-export PATH="/usr/local/texlive/2024/bin/x86_64-linux:$PATH"
+export PATH="/usr/local/texlive/2025/bin/x86_64-linux:$PATH"
 export PYENV_ROOT="$HOME/.pyenv"
 export LUA_CPATH=";;"
+export MANPATH=/usr/local/texlive/2025/texmf-dist/doc/man:$MANPATH
+export INFOPATH=/usr/local/texlive/2025/texmf-dist/doc/info:$INFOPATH
 
 # ---------------------------------- Secrets ----------------------------------
 for key_file in ~/.config/*key; do
@@ -65,6 +67,12 @@ export PS1="\[\e[0m\]$EMOJI \[\e[36m\]$HOST_PART\[\e[0m\] \[\e[38;5;140m\]\W\[\e
 export PS2=">"
 export CLICOLOR=1
 export LSCOLORS=ExFxBxDxCxegedabagacad
+
+set_title() { printf '\033]0;%s\007' "$*"; }
+user_title() { echo -ne "\033]0;$1\007"; }
+# keep existing PROMPT_COMMAND if present
+# PROMPT_COMMAND='set_title "${PWD/#$HOME/~}"'"${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
+
 
 # ---------------------------------- Aliases ----------------------------------
 
@@ -140,6 +148,7 @@ if command -v docker &>/dev/null; then
           echo "Container $container_id stopped and removed"
       done
   }
+  alias dockerrmtest="dockerrm spyglass-pytest"
 fi
 
 # ----------------------------------- Conda -----------------------------------

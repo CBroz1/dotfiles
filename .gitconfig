@@ -18,3 +18,8 @@
 	directory = /home/jguidera/Src/nwb_custom_analysis
 	directory = /home/shijiegu/Documents/spyglass
 	directory = /home/jguidera/Src/jguides_2024
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true

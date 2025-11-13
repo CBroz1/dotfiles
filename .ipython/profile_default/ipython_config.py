@@ -5,7 +5,9 @@ c.AliasManager.user_aliases = [("ls", "ls -aGg")]
 c.InteractiveShell.banner1 = ""
 c.TerminalIPythonApp.display_banner = False
 c.TerminalIPythonApp.exec_lines = [
-    "import platform; v=platform.python_version(); print(f'🌸 python {v} 🌸')"
+    "import platform; v=platform.python_version(); print(f'🌸 python {v} 🌸')",
+    "%load_ext autoreload",
+    "%autoreload 2",
 ]
 c.TerminalInteractiveShell.autoformatter = "black"
 c.TerminalInteractiveShell.editing_mode = "vi"
