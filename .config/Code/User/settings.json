@@ -1,0 +1,182 @@
+{
+    // AESTHETICS
+    "debug.console.fontSize": 16,
+    "editor.defaultFormatter": "ms-python.python",
+    "editor.fontFamily": "Menlo, Monokai, Monaco, 'Courier New', monospace",
+    "editor.fontSize": 15,
+    "editor.lineHeight": 0,
+    "editor.lineNumbers": "relative",
+    "editor.minimap.enabled": false,
+    "editor.rulers": [ 80 ],
+    "editor.stickyScroll.enabled": true,
+    "editor.tokenColorCustomizations": { "comments": "#8b97b9", "strings": "#bd93f9b7" }, // String: Reduced opacity of standard
+    // WORKBENCH
+    "window.zoomLevel": 1,
+    "workbench.colorTheme": "Dracula Theme",
+    "workbench.editor.highlightModifiedTabs": true,
+    "workbench.colorCustomizations": {
+        "[*Dracula*]": {
+            "editor.background": "#282a36",
+            "gitDecoration.untrackedResourceForeground": "#6272A4"
+        }
+    },
+    "workbench.editorAssociations": { "*.ipynb": "jupyter-notebook" },
+    // GIT & Source control
+    "git.autofetch": true,
+    "git.blame.editorDecoration.enabled": true,
+    "git.blame.statusBarItem.enabled": false,
+    "git.enableSmartCommit": true,
+    "git.enabled": true,
+    "git.ignoreLegacyWarning": true,
+    "git.openRepositoryInParentFolders": "always",
+    "git.repositoryScanIgnoredFolders": [ "node_modules", "ref/*", "datajoint-utilities", "datajoint-python" ],
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "scm.countBadge": "off",
+    "scm.inputFontSize": 16,
+    "scm.repositories.sortOrder": "path",
+    // SPELL
+    "cSpell.language": "en,en-US,aws,companies,python,python-common,latex,public-licenses,softwareTerms",
+    "cSpell.logLevel": "Warning",
+    "cSpell.maxDuplicateProblems": 2,
+    "cSpell.spellCheckDelayMs": 500,
+    "cSpell.userWords": [
+        "arange",
+        "CICD",
+        "datajoint",
+        "dotenv",
+        "longblob",
+        "mkdocs",
+        "nbins",
+        "ndarray",
+        "ndimage",
+        "nemos",
+        "paramset",
+        "paramsets",
+        "plotly",
+        "preds",
+        "randn",
+        "recreationally",
+        "scipy",
+        "segmentations",
+        "sess,",
+        "sytseng",
+        "vline",
+        "xanchor",
+        "xaxes",
+        "xaxis",
+        "yaxes",
+        "yaxis",
+        "yref"
+    ],
+    "cSpell.enableFiletypes": [
+        "!json",
+        "!jsonc",
+        "!typescript",
+        "!typescriptreact",
+        "markdown",
+        "yaml",
+        "python"
+    ],
+    // TERMINAL & FILES
+    "terminal.integrated.inheritEnv": false,
+    "terminal.integrated.fontSize": 13,
+    "terminal.external.osxExec": "iTerm.app",
+    "files.autoSave": "onFocusChange",
+    "files.associations": {
+        "*m": "matlab",
+        "*/.env": "bash",
+        ".env": "shellscript",
+        "*.json": "jsonc"
+    },
+    "files.exclude": {
+        "**/*.code-workspace": true,
+        "**/*MANIFEST*": true,
+        "**/*cspell*": true,
+        "**/*egg-info": true,
+        "**/*requirement*": true,
+        "**/*xml": true,
+        "**/.D*": true,
+        "**/.coverage*": true,
+        "**/.git/": true,
+        "**/.git_archival.txt": true,
+        "**/.gitignore": true,
+        "**/.hg": true,
+        "**/.ipynb_checkpoints": true,
+        "**/.markdownlint*": true,
+        "**/.pre-com*": true,
+        "**/.pytest_cache": true,
+        "**/.ruff_cache/": true,
+        "**/.svn": true,
+        "**/.vscode": true,
+        "**/CHANGEL*": true,
+        "**/CODE_OF*": true,
+        "**/CONTRIB*": true,
+        "**/CVS": true,
+        "**/LICENSE*": true,
+        "**/README*": true,
+        "**/Thumbs.db": true,
+        "**/__pycache__*": true,
+        "**/build": true,
+        "**/gendoc*": true,
+        "**/images/": true,
+        "**/license*": true,
+        "**/node_modules/": true,
+        "**/package*json": true,
+        "**/pyproj*": true,
+        "**/setup*": true,
+        "*output*/*aux": true,
+        "*output*/*log": true,
+        ".prettierrc": true,
+        "END": true
+    },
+    "files.trimTrailingWhitespace": false,
+    "prettier.documentSelectors": ["**/*.HTML"],
+    "html.format.contentUnformatted": "",
+    "[html]": {
+        "editor.formatOnSave": true
+    },
+
+    // PYTHON
+    "python.languageServer": "Pylance",
+    "python.analysis.autoImportCompletions": false,
+    "python.formatting.blackArgs": [ "--line-length=80", "--exclude='.env'" ],
+    "black-formatter.args": [ "--line-length=80", "--exclude='.env'" ],
+    "python.terminal.activateEnvironment": false,
+    "python.terminal.launchArgs": [ "-m", "IPython", "--no-autoindent" ],
+    "[python]": { "editor.formatOnSave": true, "editor.defaultFormatter": "ms-python.python" },
+    "python.analysis.diagnosticSeverityOverrides": { "reportUnboundVariable": "none", "reportGeneralTypeIssues": "none", "reportOptionalMemberAccess": "none" },
+
+    // NOTEBOOKS
+    "jupyter.askForKernelRestart": false,
+    "jupyter.widgetScriptSources": [ "jsdelivr.com", "unpkg.com" ],
+    "notebook.formatOnSave.enabled":true,
+    "notebook.lineNumbers": "on",
+    "notebook.output.textLineLimit": 15,
+
+    // MARKDOWN
+    "[markdown]": {
+        "editor.defaultFormatter": "DavidAnson.vscode-markdownlint",
+        "editor.formatOnSave": true
+    },
+    "editor.codeActionsOnSave": { "source.fixAll.markdownlint": "explicit" },
+    "markdown.preview.fontSize": 16,
+    "markdown.extension.list.indentationSize": "inherit",
+
+    // VIM
+    "vim.cursorStylePerMode.normal": "block-outline",
+    "vim.statusBarColors.insert": "#BD93F9",
+    "vim.statusBarColors.normal": "#8BE9FD"
+
+    // OTHERS
+    "[json]": { "editor.defaultFormatter": "vscode.json-language-features" },
+    "diffEditor.ignoreTrimWhitespace": false,
+    "editor.insertSpaces": true,
+    "editor.tabCompletion": "on",
+    "explorer.autoReveal": false,
+    "explorer.confirmDelete": false,
+    "remote.SSH.remotePlatform": { "uc0": "linux" },
+    "rewrap.reformat": true,
+    "rewrap.wrappingColumn": 80,
+    "search.useGlobalIgnoreFiles": true,
+    "security.workspace.trust.untrustedFiles": "open"
+}

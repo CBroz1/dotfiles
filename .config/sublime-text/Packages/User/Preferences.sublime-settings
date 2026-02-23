@@ -4,7 +4,7 @@
 		"Vintage",
 	],
 	"color_scheme": "Packages/Dracula Color Scheme/Dracula.tmTheme",
-	"font_size": 19,
+	"font_size": 15,
 	"theme": "Default Dark.sublime-theme",
 	"index_files": false,
 	"rulers": [80],

@@ -88,11 +88,14 @@ alias loadprofile='source ~/.bash_profile'
 alias bck="echo ' > /dev/null 2>&1 &' | pbcopy"
 alias pbcopy='xclip -selection c -rmlastnl'
 alias vdo="v ~/wrk/ucsf-notes.txt"
+alias vj="v ~/Documents/journal.md"
+alias vp="v ~/Documents/poetry.md"
 alias tmux="TERM=screen-256color-bce tmux"
 alias tm='tmux has-session -t 0 2>/dev/null && TERM=screen-256color-bce tmux attach -t 0 || TERM=screen-256color-bce tmux'
 alias spellcheckdir="cspell -c cspell.json ./**/*{py,md,yaml}"
 alias pcc="pre-commit run --all-files"
 alias mdlcheck="goruby; mdl -c .markdownlint.yaml ."
+alias dlx="yt-dlp -x -t mp3 "
 
 ## Python
 alias pip='python -m pip'
@@ -139,7 +142,7 @@ if command -v docker &>/dev/null; then
   alias dockermirr="dockerrm mirr; \
     docker volume prune -f; \
     docker run --cap-add=sys_nice \
-    --name mirr -p 3309:3306 -e MYSQL_ROOT_PASSWORD=tutorial mysql:latest"
+    --name mirr -p 3306:3306 -e MYSQL_ROOT_PASSWORD=tutorial mysql:latest"
   alias dockerps="docker ps -a --format \"{{.ID}} {{.Names}}\""
   dockerrm() {
       for container_id in "$@"; do
@@ -259,3 +262,5 @@ if command -v batcat &>/dev/null; then
 else
   alias bat='echo "batcat not installed"; cat'
 fi
+GPG_TTY=`tty`
+export GPG_TTY

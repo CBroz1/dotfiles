@@ -14,6 +14,7 @@ import sys
 from importlib import util as importlib_util
 from pathlib import Path
 
+import datajoint as dj
 from IPython.terminal.prompts import Prompts, Token
 
 DATABASE = ""
@@ -40,8 +41,6 @@ def connect_to_database():
     HAS_DATAJOINT = importlib_util.find_spec("datajoint") is not None
     if not (DATABASE and HAS_DATAJOINT):
         return False
-
-    import datajoint as dj
 
     dj_conf_path = get_creds_file(DATABASE)
     print("Credentials file               : ", dj_conf_path)
