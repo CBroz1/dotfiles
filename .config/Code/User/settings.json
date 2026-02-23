@@ -21,6 +21,7 @@
         }
     },
     "workbench.editorAssociations": { "*.ipynb": "jupyter-notebook" },
+
     // GIT & Source control
     "git.autofetch": true,
     "git.blame.editorDecoration.enabled": true,
@@ -34,8 +35,9 @@
     "scm.countBadge": "off",
     "scm.inputFontSize": 16,
     "scm.repositories.sortOrder": "path",
+
     // SPELL
-    "cSpell.language": "en,en-US,aws,companies,python,python-common,latex,public-licenses,softwareTerms",
+    "cSpell.language": "en,en-US,aws,python,python-common,latex,public-licenses,softwareTerms",
     "cSpell.logLevel": "Warning",
     "cSpell.maxDuplicateProblems": 2,
     "cSpell.spellCheckDelayMs": 500,
@@ -45,6 +47,8 @@
         "datajoint",
         "dotenv",
         "longblob",
+        "json",
+        "jsonc",
         "mkdocs",
         "nbins",
         "ndarray",
@@ -68,15 +72,8 @@
         "yaxis",
         "yref"
     ],
-    "cSpell.enableFiletypes": [
-        "!json",
-        "!jsonc",
-        "!typescript",
-        "!typescriptreact",
-        "markdown",
-        "yaml",
-        "python"
-    ],
+    "cSpell.enabledFiletypes": [ "!json", "!jsonc", "markdown", "yaml", "python" ],
+
     // TERMINAL & FILES
     "terminal.integrated.inheritEnv": false,
     "terminal.integrated.fontSize": 13,
@@ -94,7 +91,6 @@
         "**/*cspell*": true,
         "**/*egg-info": true,
         "**/*requirement*": true,
-        "**/*xml": true,
         "**/.D*": true,
         "**/.coverage*": true,
         "**/.git/": true,
@@ -106,7 +102,6 @@
         "**/.pre-com*": true,
         "**/.pytest_cache": true,
         "**/.ruff_cache/": true,
-        "**/.svn": true,
         "**/.vscode": true,
         "**/CHANGEL*": true,
         "**/CODE_OF*": true,
@@ -130,16 +125,12 @@
         "END": true
     },
     "files.trimTrailingWhitespace": false,
-    "prettier.documentSelectors": ["**/*.HTML"],
     "html.format.contentUnformatted": "",
-    "[html]": {
-        "editor.formatOnSave": true
-    },
+    "[html]": { "editor.formatOnSave": true},
 
     // PYTHON
     "python.languageServer": "Pylance",
     "python.analysis.autoImportCompletions": false,
-    "python.formatting.blackArgs": [ "--line-length=80", "--exclude='.env'" ],
     "black-formatter.args": [ "--line-length=80", "--exclude='.env'" ],
     "python.terminal.activateEnvironment": false,
     "python.terminal.launchArgs": [ "-m", "IPython", "--no-autoindent" ],
@@ -160,12 +151,12 @@
     },
     "editor.codeActionsOnSave": { "source.fixAll.markdownlint": "explicit" },
     "markdown.preview.fontSize": 16,
-    "markdown.extension.list.indentationSize": "inherit",
 
     // VIM
+    "vim.disableExtension": true,
     "vim.cursorStylePerMode.normal": "block-outline",
     "vim.statusBarColors.insert": "#BD93F9",
-    "vim.statusBarColors.normal": "#8BE9FD"
+    "vim.statusBarColors.normal": "#8BE9FD",
 
     // OTHERS
     "[json]": { "editor.defaultFormatter": "vscode.json-language-features" },
