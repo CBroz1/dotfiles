@@ -4,3 +4,4 @@ fixjson
 git-open
 markdownlint-cli
 saltthepass
+vscode-json-languageserver

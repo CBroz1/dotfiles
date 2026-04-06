@@ -5,12 +5,15 @@
 # ------------------------------------ Path ------------------------------------
 export PATH="/usr/local/bin:$PATH"
 export PATH="/home/$USER/.local/bin/:$PATH"
-export PATH="/usr/local/texlive/2024/bin/x86_64-linux:$PATH"
+export PATH="/usr/local/texlive/2025/bin/x86_64-linux:$PATH"
 export PYENV_ROOT="$HOME/.pyenv"
+export LUA_CPATH=";;"
+export MANPATH=/usr/local/texlive/2025/texmf-dist/doc/man:$MANPATH
+export INFOPATH=/usr/local/texlive/2025/texmf-dist/doc/info:$INFOPATH
 
 # ---------------------------------- Secrets ----------------------------------
 for key_file in ~/.config/*key; do
-    [ -f "$key_file" ] && source "$key_file"
+    source "$key_file"
 done
 
 # ---------------------------------- Settings ----------------------------------
@@ -24,6 +27,7 @@ set filec
 nvim_appimage=$(find ${HOME} -maxdepth 1 -name nvim*appimage 2>/dev/null)
 if [ -n "$nvim_appimage" ]; then
     alias v="$nvim_appimage -c \"lua require('configs')\""
+    alias nvim="$nvim_appimage -c \"lua require('configs')\""
     export EDITOR="$nvim_appimage -c \"lua require('configs')\""
 else
     alias v='nvim'
@@ -53,12 +57,22 @@ complete -f ss # autocomplete for custom commands
 # ----------------------------------- Prompt -----------------------------------
 emojis=("🌀" "💀" "👽" "👾" "💜" "🦄" "🐙" "🌸" "🌄" "🎃" "🎆" "🔮" "🧿")
 EMOJI=${emojis[$RANDOM % ${#emojis[@]} ]}
-HOST_FULL=$(hostname)
-HOST_PART=${HOST_FULL:0:3}
+H=$(hostname -s)
+if [[ $H == "virga"* ]]; then
+  HOST_PART="vi${H:7}"
+else
+  HOST_PART=${H:0:3}
+fi
 export PS1="\[\e[0m\]$EMOJI \[\e[36m\]$HOST_PART\[\e[0m\] \[\e[38;5;140m\]\W\[\e[0m\] > "
 export PS2=">"
 export CLICOLOR=1
 export LSCOLORS=ExFxBxDxCxegedabagacad
+
+set_title() { printf '\033]0;%s\007' "$*"; }
+user_title() { echo -ne "\033]0;$1\007"; }
+# keep existing PROMPT_COMMAND if present
+# PROMPT_COMMAND='set_title "${PWD/#$HOME/~}"'"${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
+
 
 # ---------------------------------- Aliases ----------------------------------
 
@@ -67,18 +81,26 @@ alias l="ls"
 alias ss='subl -a '
 alias sm='/usr/bin/smerge'
 alias python='python3'
-alias jupysync='jupytext --to py notebooks/*ipynb; mv notebooks/*py notebooks/py_scripts; black notebooks/py_scripts'
+alias jupysync='jupytext --to py:light notebooks/*ipynb; mv notebooks/*py notebooks/py_scripts; black notebooks/py_scripts'
 alias profilev='nvim ~/.bash_profile'
 alias loadprofile='source ~/.bash_profile'
 
 alias bck="echo ' > /dev/null 2>&1 &' | pbcopy"
 alias pbcopy='xclip -selection c -rmlastnl'
 alias vdo="v ~/wrk/ucsf-notes.txt"
+alias vj="v ~/Documents/journal.md"
+alias vp="v ~/Documents/poetry.md"
 alias tmux="TERM=screen-256color-bce tmux"
 alias tm='tmux has-session -t 0 2>/dev/null && TERM=screen-256color-bce tmux attach -t 0 || TERM=screen-256color-bce tmux'
 alias spellcheckdir="cspell -c cspell.json ./**/*{py,md,yaml}"
 alias pcc="pre-commit run --all-files"
 alias mdlcheck="goruby; mdl -c .markdownlint.yaml ."
+alias dlx="yt-dlp -x -t mp3 "
+
+## Python
+alias pip='python -m pip'
+alias ipython='python -m IPython'
+alias pytest='python -m pytest'
 alias ptest="pytest --no-teardown --pdb --sw"
 
 ## Git
@@ -136,7 +158,7 @@ if command -v docker &>/dev/null; then
   alias dockermirr="dockerrm mirr; \
     docker volume prune -f; \
     docker run --cap-add=sys_nice \
-    --name mirr -p 3309:3306 -e MYSQL_ROOT_PASSWORD=tutorial mysql:latest"
+    --name mirr -p 3306:3306 -e MYSQL_ROOT_PASSWORD=tutorial mysql:latest"
   alias dockerps="docker ps -a --format \"{{.ID}} {{.Names}}\""
   dockerrm() {
       for container_id in "$@"; do
@@ -145,6 +167,7 @@ if command -v docker &>/dev/null; then
           echo "Container $container_id stopped and removed"
       done
   }
+  alias dockerrmtest="dockerrm spyglass-pytest"
 fi
 
 # ----------------------------------- Conda -----------------------------------
@@ -162,12 +185,18 @@ else
 fi
 unset __conda_setup
 # <<< conda initialize <<<
-conda config --set auto_activate_base false
+if command -v conda &>/dev/null; then
+  conda config --set auto_activate false
+fi
 
 # ------------------------------------ fzf ------------------------------------
 # CTRL-R script to insert command from history into the command line/region
 if command -v fzf &>/dev/null; then
-  export FZF_DEFAULT_COMMAND='ag -g ""'
+  if command -v ag &>/dev/null; then
+    export FZF_DEFAULT_COMMAND='ag -g "" --ignore "trainset"'
+  else
+    export FZF_DEFAULT_COMMAND='--ignore "trainset"'
+  fi
   __fzf_history ()
   {
       builtin history -a;
@@ -207,9 +236,6 @@ if command -v fzf &>/dev/null; then
 fi
 
 # ------------------------------------ NVM ------------------------------------
-if command -v nvm &>/dev/null; then
-  source ~/.nvm/nvm.sh
-  export NVM_DIR="$HOME/.nvm"
 fi
 
 # ----------------------------------- Tools -----------------------------------
@@ -244,4 +270,6 @@ if command -v batcat &>/dev/null; then
 else
   alias bat='echo "batcat not installed"; cat'
 fi
+GPG_TTY=`tty`
+export GPG_TTY
 . "$HOME/.cargo/env"

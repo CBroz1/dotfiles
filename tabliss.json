@@ -1,0 +1,93 @@
+{
+  "background": {
+    "id": "oxxMzjC1mA-z",
+    "key": "background/colour",
+    "display": { "blur": 0, "luminosity": -0.2 }
+  },
+  "widget/default-time": null,
+  "widget/default-greeting": null,
+  "data/DfNiYQcCajJ1": {
+    "mode": "digital",
+    "hour12": false,
+    "showDate": false,
+    "showMinutes": true,
+    "showSeconds": false,
+    "showDayPeriod": true,
+    "timeZone": null,
+    "name": ""
+  },
+  "locale": "en",
+  "timeZone": null,
+  "data/oxxMzjC1mA-z": { "colour": "#282a36" },
+  "widget/tXmbt5UGK7y9": null,
+  "widget/L5sL-qyRMLbM": null,
+  "widget/ed-psMupNHxY": null,
+  "widget/D_sNFxyqibcq": null,
+  "widget/12ZUFd0fu1Yf": null,
+  "widget/nIsycgjgXe16": null,
+  "widget/Ta2BUc8WxyED": null,
+  "widget/f3hq-mC9rT4w": null,
+  "widget/ObEfPdnDOPeB": null,
+  "widget/UAyNWyBwBe8N": null,
+  "widget/apzKOzUPv-77": null,
+  "widget/_tCpADayWDV-": null,
+  "widget/_ZxOuSeU8lvc": null,
+  "widget/eBGFxkb5YEGK": null,
+  "widget/oRZKIstHMMop": null,
+  "widget/-6JWHbW0qHqN": {
+    "id": "-6JWHbW0qHqN",
+    "key": "widget/links",
+    "order": 2,
+    "display": {
+      "position": "middleCentre",
+      "fontWeight": 700,
+      "colour": "#bd93f9",
+      "fontSize": 24
+    }
+  },
+  "widget/dKR9MLjyOUSc": null,
+  "widget/fxTHgBYTFcPI": null,
+  "widget/OeI9oLVZzJO4": null,
+  "widget/DfNiYQcCajJ1": {
+    "id": "DfNiYQcCajJ1",
+    "key": "widget/time",
+    "order": 0,
+    "display": {
+      "position": "middleCentre",
+      "fontSize": 24,
+      "fontFamily": "Arial",
+      "colour": "#bd93f9"
+    }
+  },
+  "widget/KNE46KTRomHY": null,
+  "widget/XGBo6LKtgf7J": null,
+  "widget/DMJyYC_CdTsi": null,
+  "widget/T9nNj2ny98kd": null,
+  "widget/8hgsXyYPJPA7": null,
+  "widget/6TJ1MPNEno_M": null,
+  "data/-6JWHbW0qHqN": {
+    "columns": 5,
+    "links": [
+      { "url": "https://mail.google.com/mail/u/0/#inbox", "icon": "mail" },
+      { "url": "https://www.google.com/calendar/render", "icon": "calendar" },
+      { "url": "https://keep.google.com/", "icon": "edit" },
+      { "url": "https://github.com/notifications", "icon": "code", "name": "" },
+      { "url": "https://email.ucsf.edu/", "icon": "send" },
+      { "url": "https://www.reddit.com/r/all/", "icon": "server" },
+      {
+        "url": "https://www.youtube.com/playlist?list=WL",
+        "icon": "play-circle"
+      },
+      {
+        "url": "https://oltx.fidelity.com/ftgw/fbc/oftop/portfolio",
+        "icon": "dollar-sign"
+      },
+      { "url": "https://discord.com/channels/@me", "icon": "activity" },
+      { "url": "https://5e.tools/index.html", "icon": "shield" }
+    ],
+    "visible": true,
+    "linkOpenStyle": false
+  },
+  "focus": false,
+  "version": 3
+}

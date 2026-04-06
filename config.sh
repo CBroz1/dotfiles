@@ -64,8 +64,7 @@ git ls-files --exclude-standard | while read file; do # ignore .gitignore files
     #     echo "SKIP $PWD/$file → $target"
     else
         echo "REPL $PWD/$file → $target"
-        rm "$target" || true
-        ln -s "$PWD/$file" "$target"
+        ln -sf "$PWD/$file" "$target"
     fi
 done
 
@@ -73,7 +72,7 @@ HOST_FULL=$(hostname)
 HOST_PART=${HOST_FULL:0:3}
 if [[ $HOST_PART == "pop" ]]; then
     echo "Pop!_OS detected"
-    eval `dircolors /home/$USER/.dir_colors/dircolors`
+    eval `dircolors ../.dir_colors/dircolors`
     gsettings set org.gnome.desktop.background picture-options 'none'
     gsettings set org.gnome.desktop.background primary-color '#282a36'
 fi

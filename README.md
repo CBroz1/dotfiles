@@ -31,6 +31,22 @@ sudo visudo
 ## Browser
 
 - Firefox
+  - Extensions
+    - [Custom Search](https://addons.mozilla.org/en-US/firefox/addon/add-custom-search-engine/)
+    - [Allow Right Click](https://addons.mozilla.org/en-US/firefox/addon/re-enable-right-click/)
+    - [Consent-O-Matic](https://addons.mozilla.org/en-US/firefox/addon/consent-o-matic/)
+    - [Custom New Tab](https://addons.mozilla.org/en-US/firefox/addon/custom-new-tab-page/)
+    - [Dark Reader](https://addons.mozilla.org/en-US/firefox/addon/darkreader/)
+    - [Ghostery](https://addons.mozilla.org/en-US/firefox/addon/ghostery/)
+    - [Dracula Theme](https://addons.mozilla.org/en-US/firefox/addon/dracula-dark-colorscheme/)
+    - [Gnome Shell Integration](https://addons.mozilla.org/en-US/firefox/addon/gnome-shell-integration/)
+    - [LeechBlock](https://addons.mozilla.org/en-US/firefox/addon/leechblock-ng/)
+    - [Privacy Badger](https://addons.mozilla.org/en-US/firefox/addon/privacy-badger17/)
+    - [Reddit Enhancement Suite](https://addons.mozilla.org/en-US/firefox/addon/reddit-enhancement-suite/)
+    - [SponsorBlock](https://addons.mozilla.org/en-US/firefox/addon/sponsorblock/)
+    - [Tabliss](https://addons.mozilla.org/en-US/firefox/addon/tabliss/) - see `tabliss.json` in this repo
+    - [uBlock Origin](https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/)
+    - [Unhook](https://addons.mozilla.org/en-US/firefox/addon/youtube-recommended-videos/)
   - Add custom searches with ext. Then Settings -> Search -> Shortcut
     - yt
       - <https://www.youtube.com/results?search_query=%s>
@@ -56,6 +72,10 @@ sudo visudo
     - Foreground --> #f8f8f2
     - Scrollbar --> custom --> #6272a4
     - Selection --> custom --> #44475a
+  - New tab config:
+    - [URL](URL: <https://cbroz1.github.io/Bento/>)
+    - Title: Bento
+    - Bachground:#282a36
 - Gmail sign in
 
 ## Programs

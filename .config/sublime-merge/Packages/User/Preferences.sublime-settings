@@ -1,3 +1,4 @@
 {
-	"theme": "Dracula.sublime-theme"
+	"theme": "Dracula.sublime-theme",
+	"update_check": false,
 }
