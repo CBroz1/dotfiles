@@ -236,6 +236,9 @@ if command -v fzf &>/dev/null; then
 fi
 
 # ------------------------------------ NVM ------------------------------------
+if command -v nvm &>/dev/null; then
+  source ~/.nvm/nvm.sh
+  export NVM_DIR="$HOME/.nvm"
 fi
 
 # ----------------------------------- Tools -----------------------------------
