@@ -1,6 +1,7 @@
 {
 	"ignored_packages":
 	[
+		"Package Control",
 		"Vintage",
 	],
 	"color_scheme": "Packages/Dracula Color Scheme/Dracula.tmTheme",

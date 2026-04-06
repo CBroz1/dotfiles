@@ -44,6 +44,9 @@ sudo visudo
     - i
       - <https://www.google.com/search?q=%s&udm=2>
       - <https://cdn-icons-png.flaticon.com/256/9261/9261079.png>
+    - s
+      - <https://www.google.com/search?q=%s&tbm=isch>
+      - <https://www.svgrepo.com/show/306145/googlescholar.svg>
   - Customize toolbar
     - Add home
     - Remove buffer x2
@@ -77,6 +80,8 @@ sudo visudo
 - [pulse deb](http://webdev.web3.technion.ac.il/docs/cis/public/ssl-vpn/ps-pulse-ubuntu-debian.deb)
 - [slack deb](https://slack.com/downloads/instructions/linux?ddl=1&build=deb)
 - [spotify](https://www.spotify.com/us/download/linux/)
+- [spotify-tui](https://github.com/Rigellute/spotify-tui/releases): Grab binary
+    from latest release
 - [steam](https://store.steampowered.com/about/)
 - sublime
   - [Text](https://www.sublimetext.com/docs/linux_repositories.html)
@@ -87,6 +92,7 @@ sudo visudo
   - Edit color scheme, add global: `"fold_marker": "#bd93f9"`
 - [tlmgr init-usertree](https://tug.org/texlive/upgrade.html)
 - [tpm](https://github.com/tmux-plugins/tpm)
+- [youtube-dl](https://github.com/ytdl-org/youtube-dl?tab=readme-ov-file#installation)
 - [zoom](https://zoom.us/download?os=linux)
 
 ## Logins

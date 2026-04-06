@@ -1,0 +1,22 @@
+(
+    name: "Play",
+    description: "Play/Pause mocp",
+    bin: (
+        path: "play",
+    ),
+    icon: Name("audio-x-generic"), // From Adawaita icon theme
+    // Optional
+    query: (
+        // Optional -- if we should isolate this plugin when the regex matches
+        isolate: false,
+        // Optional -- Plugin which searches on empty queries
+        persistent: false,
+        // Optional -- avoid sorting results from this plugin
+        no_sort: true,
+        // Optional -- pattern that a query must have to be sent to plugin
+        // regex: "pattern",
+        // Optional -- the launcher should keep a history for this plugin
+        history: true,
+    )
+)
+

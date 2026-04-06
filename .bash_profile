@@ -88,6 +88,19 @@ alias gc='git commit'
 alias gcm='git commit -m'
 alias gp='git pull'
 alias grom='git remote rename origin me'
+gdb() { # Function to delete local branches not present on the 'me' remote
+    git fetch me --prune
+    for branch in $(git branch | grep -v '^\*' | grep -v 'main'); do
+        if ! git show-ref --verify --quiet refs/remotes/me/"$branch"; then
+            if [ "$1" == "do" ]; then # if argument is 'do', delete the branch
+                git branch -D "$branch"  # Use -D to force delete unmerged
+            else
+                echo "No remote branch me/'$branch'"
+            fi
+        fi
+    done
+}
+
 
 ## Environments
 alias off="conda deactivate"
@@ -116,7 +129,10 @@ if command -v docker &>/dev/null; then
   alias dockerprune="\
     docker container prune -f;\
     docker image prune -af;\
-    docker builder prune -f"
+    docker builder prune -f;\
+    docker volume prune -f;\
+    docker network prune -f;\
+    docker system df"
   alias dockermirr="dockerrm mirr; \
     docker volume prune -f; \
     docker run --cap-add=sys_nice \
@@ -213,7 +229,8 @@ fi
 if command -v eza &>/dev/null; then
   alias ll='eza -l --icons --git -a'
   alias lt='eza --tree --level=2 --long --icons --git'
-  alias lg='eza --tree --level=2 --long --icons --git --git-ignore'
+  alias lg='eza --tree --level=1 --long --icons --git --git-ignore'
+  alias lgg='eza --tree --level=2 --long --icons --git --git-ignore'
 else
   alias ll='ls -l --color=auto'
   alias lt='tree -L 2'
@@ -227,3 +244,4 @@ if command -v batcat &>/dev/null; then
 else
   alias bat='echo "batcat not installed"; cat'
 fi
+. "$HOME/.cargo/env"

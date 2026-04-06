@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if command -v mocp &> /dev/null; then
+    mocp -G
+elif command -v playerctl &> /dev/null; then
+    playerctl play-pause
+else
+    echo "No supported media player found."
+fi

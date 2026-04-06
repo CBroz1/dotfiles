@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Terminal=false
+Name=Play
+# Icon=/path/to/icon/icon.svg
+Exec='mocp -G'
+
