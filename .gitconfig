@@ -4,7 +4,7 @@
 [init]
 	defaultBranch = me
 [core]
-	editor = "nvim"
+	editor = /home/cbroz/nvim-linux-x86_64.appimage -c \"lua require('configs')\"
 [github]
 	user = cbroz1
 [credential "https://github.com"]
@@ -18,6 +18,7 @@
 	directory = /home/jguidera/Src/nwb_custom_analysis
 	directory = /home/shijiegu/Documents/spyglass
 	directory = /home/jguidera/Src/jguides_2024
+	directory = /home/shijiegu/Documents/spyglass-export-docker
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f

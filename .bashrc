@@ -23,4 +23,7 @@ if [ -f "$HOME/.bash_profile" ]; then
     source "$HOME/.bash_profile"
 fi
 
-. "$HOME/.cargo/env"
+# . "$HOME/.cargo/env"
+[ -f ~/.cargo/env ] && source ~/.cargo/env
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash

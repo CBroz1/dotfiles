@@ -1,0 +1,234 @@
+#!/bin/bash
+# spyglass worktree + conda environment lifecycle manager.
+#
+# Standardizes the per-issue setup (worktree, .claude folder, environment) into
+# one command, and -- via the hybrid environment model -- avoids cloning a full
+# multi-GB conda env for every issue.
+#
+# Subcommands:
+#   sg new <name> [--clone] [--goal-file PATH | -- <goal text...>]
+#       Update `main` from the upstream remote, create worktree <name> off it,
+#       install the .claude template (injecting the goal under ## GOALS; goal
+#       may be inline after `--` or, for multi-line goals, a file via
+#       --goal-file), write
+#       <name>/.sgdev, and wire up the environment:
+#         default : shared deps env + PYTHONPATH override   (~0 GB per issue)
+#         --clone : dedicated env cloned from the shared env + `pip install -e`
+#                   (use only when the branch changes a dependency version)
+#
+#   sg rm <name> [-f]
+#       Remove the worktree and, ONLY for a --clone (editable) issue, its
+#       dedicated conda env. The shared env is never removed. Prompts unless -f.
+#
+#   sg ls
+#       List worktrees with their resolved env, mode, and branch.
+#
+# Config (environment variable overrides):
+#   SG_ROOT        git dir holding the worktrees   (default: ~/wrk/spyglass)
+#   SG_BASE        base branch / worktree          (default: main)
+#   SG_REMOTE      upstream remote                 (default: sg)
+#   SG_RBRANCH     upstream branch                 (default: master)
+#   SG_SHARED_ENV  shared deps env                 (default: spyglass-dev)
+#   SG_MASTER_ENV  env that shared/clone copy from (default: spyglass)
+#   SG_TEMPLATE    .claude template directory      (default: $SG_ROOT/.claude)
+set -eo pipefail
+
+SG_ROOT="${SG_ROOT:-$HOME/wrk/spyglass}"
+SG_BASE="${SG_BASE:-main}"
+SG_REMOTE="${SG_REMOTE:-sg}"
+SG_RBRANCH="${SG_RBRANCH:-master}"
+SG_SHARED_ENV="${SG_SHARED_ENV:-spyglass-dev}"
+SG_MASTER_ENV="${SG_MASTER_ENV:-spyglass}"
+SG_TEMPLATE="${SG_TEMPLATE:-$SG_ROOT/.claude}"
+
+# Run git against the base worktree, which is unambiguously a working tree.
+GIT=(git -C "$SG_ROOT/$SG_BASE")
+
+# shellcheck disable=SC1091
+source "$(conda info --base)/etc/profile.d/conda.sh"
+
+# Note: deliberately uses awk (not grep) throughout -- an interactive `grep`
+# function wrapper that `exec`s a replacement would otherwise break the script.
+env_exists() {
+    conda env list | awk -v n="$1" '/^#/ {next} $1 == n {f=1} END {exit !f}'
+}
+
+ensure_shared_env() {
+    if ! env_exists "$SG_SHARED_ENV"; then
+        echo "==> Creating shared deps env '$SG_SHARED_ENV'" \
+             "(one-time clone of '$SG_MASTER_ENV')"
+        conda create -y -n "$SG_SHARED_ENV" --clone "$SG_MASTER_ENV"
+    fi
+}
+
+# Replace the body of the `## GOALS` section in a CLAUDE.md (copied from the
+# master template) with the contents of the goal file. The goal text is read
+# from a file (not an arg) so multi-line goals need no shell escaping. Single
+# awk pass: if a `## GOALS` heading is present its body is replaced; otherwise
+# a GOALS section is inserted before the first section heading (or appended).
+inject_goals() {
+    local file="$1" gf="$2" tmp
+    tmp=$(mktemp)
+    awk -v gf="$gf" '
+        function emit(  l){ while ((getline l < gf) > 0) print l; close(gf) }
+        !seen && /^##[ \t]+/ {
+            seen = 1
+            if ($0 ~ /^##[ \t]+GOALS[ \t]*$/) {
+                print; print ""; emit(); print ""; skip = 1; next
+            }
+            print "## GOALS"; print ""; emit(); print ""
+            print; next
+        }
+        skip && /^##[ \t]+/ { skip = 0 }
+        skip { next }
+        { print }
+        END { if (!seen) { print ""; print "## GOALS"; print ""; emit() } }
+    ' "$file" > "$tmp"
+    mv "$tmp" "$file"
+}
+
+cmd_new() {
+    local name="" clone=0 goal="" goalfile=""
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --clone) clone=1; shift ;;
+            --goal-file) goalfile="$2"; shift 2 ;;
+            --) shift; goal="$*"; break ;;
+            -*) echo "Unknown option: $1" >&2; exit 1 ;;
+            *)
+                if [[ -z "$name" ]]; then
+                    name="$1"; shift
+                else
+                    goal="$*"; break
+                fi
+                ;;
+        esac
+    done
+    [[ -n "$name" ]] || {
+        echo "Usage: sg new <name> [--clone] [--goal-file PATH | -- <goal>]" >&2
+        exit 1
+    }
+
+    local wt="$SG_ROOT/$name"
+    [[ -e "$wt" ]] && { echo "Worktree already exists: $wt" >&2; exit 1; }
+    if env_exists "$name"; then
+        echo "Refusing: a conda env named '$name' already exists" >&2; exit 1
+    fi
+
+    # Normalize the goal to a file so multi-line input needs no escaping.
+    local gf="" gf_tmp=0
+    if [[ -n "$goalfile" ]]; then
+        [[ -f "$goalfile" ]] || { echo "Goal file not found: $goalfile" >&2; exit 1; }
+        gf="$goalfile"
+    elif [[ -n "$goal" ]]; then
+        gf=$(mktemp); gf_tmp=1
+        printf '%s\n' "$goal" > "$gf"
+    fi
+
+    echo "==> Updating '$SG_BASE' from $SG_REMOTE/$SG_RBRANCH"
+    "${GIT[@]}" pull "$SG_REMOTE" "$SG_RBRANCH"
+
+    echo "==> Creating worktree '$name' (new branch off '$SG_BASE')"
+    "${GIT[@]}" worktree add -b "$name" "$wt" "$SG_BASE"
+
+    echo "==> Installing .claude template from $SG_TEMPLATE"
+    if [[ -d "$SG_TEMPLATE" ]]; then
+        cp -r "$SG_TEMPLATE" "$wt/.claude"
+    else
+        mkdir -p "$wt/.claude"
+        echo "    (no template at $SG_TEMPLATE; created empty .claude)"
+    fi
+    if [[ -n "$gf" && -f "$wt/.claude/CLAUDE.md" ]]; then
+        echo "==> Injecting goal into .claude/CLAUDE.md (## GOALS)"
+        inject_goals "$wt/.claude/CLAUDE.md" "$gf"
+    fi
+    [[ "$gf_tmp" -eq 1 ]] && rm -f "$gf"
+
+    local env mode
+    if [[ "$clone" -eq 1 ]]; then
+        ensure_shared_env
+        echo "==> Cloning dedicated env '$name' from '$SG_SHARED_ENV'"
+        conda create -y -n "$name" --clone "$SG_SHARED_ENV"
+        echo "==> Editable install of worktree into '$name'"
+        conda run -n "$name" pip install -e "$wt" --no-deps
+        env="$name"; mode="editable"
+    else
+        ensure_shared_env
+        env="$SG_SHARED_ENV"; mode="pythonpath"
+    fi
+
+    printf 'SG_ENV=%s\nSG_MODE=%s\n' "$env" "$mode" > "$wt/.sgdev"
+
+    echo
+    echo "Done. Worktree : $wt"
+    echo "     Env       : $env  (mode: $mode)"
+    echo "     Run       : cd $wt && sgrun pytest --no-teardown ..."
+    echo "     Interact  : cd $wt && spython -i some-script.py <db>"
+    [[ -n "$gf" ]] || echo "     Note      : no goal given; fill in ## GOALS in .claude/CLAUDE.md (or re-run with --goal-file)"
+}
+
+cmd_rm() {
+    local name="" force=0
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -f|--force) force=1; shift ;;
+            -*) echo "Unknown option: $1" >&2; exit 1 ;;
+            *) name="$1"; shift ;;
+        esac
+    done
+    [[ -n "$name" ]] || { echo "Usage: sg rm <name> [-f]" >&2; exit 1; }
+
+    local wt="$SG_ROOT/$name"
+    local SG_ENV="" SG_MODE=""
+    # shellcheck disable=SC1091
+    [[ -f "$wt/.sgdev" ]] && source "$wt/.sgdev"
+
+    local drop_env=0
+    echo "Will remove worktree : $wt"
+    if [[ "$SG_MODE" == "editable" && -n "$SG_ENV" ]] && env_exists "$SG_ENV"; then
+        drop_env=1
+        echo "Will remove env      : $SG_ENV (dedicated)"
+    else
+        echo "Env preserved        : ${SG_ENV:-shared} (shared envs are never removed)"
+    fi
+
+    if [[ "$force" -ne 1 ]]; then
+        read -r -p "Proceed? [y/N] " ans
+        [[ "$ans" =~ ^[Yy]$ ]] || { echo "Aborted."; exit 0; }
+    fi
+
+    local fflag=()
+    [[ "$force" -eq 1 ]] && fflag=(--force)
+    "${GIT[@]}" worktree remove "${fflag[@]}" "$wt"
+    [[ "$drop_env" -eq 1 ]] && conda env remove -y -n "$SG_ENV"
+    echo "Removed."
+}
+
+cmd_ls() {
+    printf "%-18s %-16s %-10s %s\n" WORKTREE ENV MODE BRANCH
+    "${GIT[@]}" worktree list --porcelain \
+        | awk '/^worktree /{print $2}' \
+        | while read -r wt; do
+            local name env mode br
+            name=$(basename "$wt")
+            env="-"; mode="-"
+            if [[ -f "$wt/.sgdev" ]]; then
+                env=$(sed -n 's/^SG_ENV=//p' "$wt/.sgdev")
+                mode=$(sed -n 's/^SG_MODE=//p' "$wt/.sgdev")
+            fi
+            br=$(git -C "$wt" rev-parse --abbrev-ref HEAD 2>/dev/null || echo "?")
+            printf "%-18s %-16s %-10s %s\n" "$name" "$env" "$mode" "$br"
+        done
+}
+
+# Dispatch only when executed, not when sourced (sourcing exposes the
+# functions for testing/reuse without running a subcommand).
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    case "${1:-}" in
+        new) shift; cmd_new "$@" ;;
+        rm)  shift; cmd_rm "$@" ;;
+        ls)  shift; cmd_ls "$@" ;;
+        -h|--help|"") sed -n '2,40{/^#/s/^# \{0,1\}//p}' "$0" ;;
+        *) echo "Unknown subcommand: $1" >&2; echo "Try: sg --help" >&2; exit 1 ;;
+    esac
+fi

@@ -1,0 +1,50 @@
+#!/bin/bash
+# Run a command inside the conda environment of the CURRENT spyglass worktree,
+# with that worktree's source winning on import so the LOCAL spyglass is always
+# the one that gets used -- for you and for Claude alike.
+#
+# Resolution (from the current directory):
+#   1. Find the worktree root via `git rev-parse --show-toplevel`.
+#   2. Read <worktree>/.sgdev (written by `sg new`):
+#          SG_ENV=spyglass-dev     # conda env to activate
+#          SG_MODE=pythonpath      # pythonpath | editable
+#   3. Activate SG_ENV. In pythonpath mode, prepend <worktree>/src to
+#      PYTHONPATH so `import spyglass` resolves to the local checkout (this
+#      overrides the env's legacy .pth editable install -- verified safe).
+#
+# With no .sgdev present it falls back to the master env + PYTHONPATH override,
+# so it still does the right thing in any worktree with zero setup.
+#
+# Usage:
+#   sgrun <command> [args...]
+# Examples:
+#   sgrun pytest -x --no-teardown tests/
+#   sgrun python maintenance_scripts/foo.py prod
+set -eo pipefail
+
+if [[ $# -eq 0 ]]; then
+    echo "Usage: sgrun <command> [args...]" >&2
+    exit 1
+fi
+
+WT=$(git rev-parse --show-toplevel 2>/dev/null) || {
+    echo "sgrun: not inside a git worktree (cd into a spyglass worktree first)" >&2
+    exit 1
+}
+
+SG_ENV=""
+SG_MODE=""
+# shellcheck disable=SC1091
+[[ -f "$WT/.sgdev" ]] && source "$WT/.sgdev"
+SG_ENV="${SG_ENV:-${SG_MASTER_ENV:-spyglass}}"
+SG_MODE="${SG_MODE:-pythonpath}"
+
+# shellcheck disable=SC1091
+source "$(conda info --base)/etc/profile.d/conda.sh"
+conda activate "$SG_ENV"
+
+if [[ "$SG_MODE" == "pythonpath" ]]; then
+    export PYTHONPATH="$WT/src${PYTHONPATH:+:$PYTHONPATH}"
+fi
+
+exec "$@"

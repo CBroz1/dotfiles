@@ -192,11 +192,11 @@ fi
 # ------------------------------------ fzf ------------------------------------
 # CTRL-R script to insert command from history into the command line/region
 if command -v fzf &>/dev/null; then
-  if command -v ag &>/dev/null; then
-    export FZF_DEFAULT_COMMAND='ag -g "" --ignore "trainset"'
-  else
-    export FZF_DEFAULT_COMMAND='--ignore "trainset"'
-  fi
+  # if command -v ag &>/dev/null; then
+  #   export FZF_DEFAULT_COMMAND='ag -g "" --ignore "trainset"'
+  # else
+  #   export FZF_DEFAULT_COMMAND='--ignore "trainset"'
+  # fi
   __fzf_history ()
   {
       builtin history -a;
@@ -261,7 +261,7 @@ if command -v eza &>/dev/null; then
   alias lg='eza --tree --level=1 --long --icons --git --git-ignore'
   alias lgg='eza --tree --level=2 --long --icons --git --git-ignore'
 else
-  alias ll='ls -l --color=auto'
+  alias ll='ls -al --color=auto'
   alias lt='tree -L 2'
   alias lg='lt_git_ignore'
 fi

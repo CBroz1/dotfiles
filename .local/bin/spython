@@ -1,0 +1,15 @@
+#!/bin/bash
+# Interactive IPython in the CURRENT spyglass worktree's environment, with the
+# worktree's local source winning on import. Drop-in replacement for `ipython`
+# that is env- and worktree-aware; your real `ipython` is left untouched.
+#
+# Loads the ~/.ipython startup config (prompt.py), so the first positional arg
+# is still treated as the database to connect to -- i.e.
+#     spython -i some-temp-script.py lorenlab
+# behaves exactly like
+#     ipython -i some-temp-script.py lorenlab
+# except it uses this worktree's spyglass and its resolved conda env.
+#
+# Usage:
+#   spython [ipython args...]
+exec sgrun ipython --ipython-dir "$HOME/.ipython" "$@"
