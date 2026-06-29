@@ -1,0 +1,15 @@
+#!/bin/bash
+# Run pytest in the CURRENT spyglass worktree's environment, with the worktree's
+# local source winning on import. Drop-in replacement for `pytest` that is env-
+# and worktree-aware; your real `pytest` is left untouched.
+#
+# Like `spython` (ipython) but for the test suite -- it resolves this worktree's
+# conda env and prepends its local `src` to PYTHONPATH via `sgrun`, so the tests
+# exercise THIS checkout's spyglass rather than the env's installed copy.
+#
+# Usage:
+#   stest [pytest args...]
+# Examples:
+#   stest --no-teardown tests/common
+#   stest -x --no-teardown --pdb --sw
+exec sgrun pytest "$@"

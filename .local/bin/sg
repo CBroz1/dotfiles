@@ -15,6 +15,14 @@
 #         default : shared deps env + PYTHONPATH override   (~0 GB per issue)
 #         --clone : dedicated env cloned from the shared env + `pip install -e`
 #                   (use only when the branch changes a dependency version)
+#       Also hardlinks the read-only pytest data inputs (raw/video/deeplabcut)
+#       from $SG_CACHE into <name>/tests/_data so the first test run skips the
+#       ~175 MB download. Seed the cache once with ONLY downloaded inputs (no
+#       spyglass-generated `*_.nwb` copies): the suite rewrites those in place,
+#       so sharing them via hardlink would corrupt the cache.
+#       Finally copies src/spyglass/_version.py from `main` (git-ignored, build-
+#       generated) so `from spyglass import __version__` resolves under the
+#       pythonpath model -- otherwise it ImportErrors and breaks file insertion.
 #
 #   sg rm <name> [-f]
 #       Remove the worktree and, ONLY for a --clone (editable) issue, its
@@ -23,23 +31,35 @@
 #   sg ls
 #       List worktrees with their resolved env, mode, and branch.
 #
+#   sg prune [--do]
+#       Clean up branches whose upstream work is done: for every local branch
+#       (except the base) that is EITHER missing its `me/<branch>` counterpart
+#       (you delete me/X on merge) OR already merged into the upstream branch,
+#       remove its worktree + dedicated env (via `sg rm`) and delete the local
+#       branch. Dry-run by default; pass `--do` (or `do`) to actually delete.
+#       A worktree opts out of the sweep with `SG_KEEP=1` in its `.sgdev`.
+#
 # Config (environment variable overrides):
 #   SG_ROOT        git dir holding the worktrees   (default: ~/wrk/spyglass)
 #   SG_BASE        base branch / worktree          (default: main)
 #   SG_REMOTE      upstream remote                 (default: sg)
 #   SG_RBRANCH     upstream branch                 (default: master)
+#   SG_MEREMOTE    your fork remote                (default: me)
 #   SG_SHARED_ENV  shared deps env                 (default: spyglass-dev)
 #   SG_MASTER_ENV  env that shared/clone copy from (default: spyglass)
 #   SG_TEMPLATE    .claude template directory      (default: $SG_ROOT/.claude)
+#   SG_CACHE       shared test-data input cache    (default: $SG_ROOT/.test_data)
 set -eo pipefail
 
 SG_ROOT="${SG_ROOT:-$HOME/wrk/spyglass}"
 SG_BASE="${SG_BASE:-main}"
 SG_REMOTE="${SG_REMOTE:-sg}"
 SG_RBRANCH="${SG_RBRANCH:-master}"
+SG_MEREMOTE="${SG_MEREMOTE:-me}"
 SG_SHARED_ENV="${SG_SHARED_ENV:-spyglass-dev}"
 SG_MASTER_ENV="${SG_MASTER_ENV:-spyglass}"
 SG_TEMPLATE="${SG_TEMPLATE:-$SG_ROOT/.claude}"
+SG_CACHE="${SG_CACHE:-$SG_ROOT/.test_data}"
 
 # Run git against the base worktree, which is unambiguously a working tree.
 GIT=(git -C "$SG_ROOT/$SG_BASE")
@@ -51,6 +71,50 @@ source "$(conda info --base)/etc/profile.d/conda.sh"
 # function wrapper that `exec`s a replacement would otherwise break the script.
 env_exists() {
     conda env list | awk -v n="$1" '/^#/ {next} $1 == n {f=1} END {exit !f}'
+}
+
+# Hardlink the read-only pytest data inputs (raw/video/deeplabcut) from the
+# shared cache into a new worktree so the first test run skips the ~175 MB
+# download. Generated/mutable dirs (analysis, recording, ...) are NOT seeded --
+# the suite regenerates those and its teardown removes them. Falls back to a
+# real copy if hardlinking fails (e.g. cross-filesystem cache).
+seed_test_data() {
+    local wt="$1" dest="$1/tests/_data" sub seeded=0
+    [[ -d "$SG_CACHE" ]] || return 0
+    mkdir -p "$dest"
+    for sub in raw video deeplabcut; do
+        [[ -d "$SG_CACHE/$sub" ]] || continue
+        [[ -e "$dest/$sub" ]] && continue
+        if cp -al "$SG_CACHE/$sub" "$dest/$sub" 2>/dev/null \
+                || cp -a "$SG_CACHE/$sub" "$dest/$sub"; then
+            seeded=1
+        fi
+    done
+    # Defensive: never share spyglass-GENERATED working copies (e.g. the
+    # `<name>_.nwb` that insert_sessions.py rewrites in place). Only the
+    # downloaded inputs should be hardlinked; drop any generated copies that a
+    # polluted cache may have carried in, so the suite regenerates them locally.
+    find "$dest/raw" -maxdepth 1 -name '*_.nwb' -delete 2>/dev/null
+    [[ "$seeded" -eq 1 ]] \
+        && echo "==> Seeded test-data inputs from $SG_CACHE (hardlinked)"
+    return 0
+}
+
+# Pythonpath-mode worktrees never run a build, so the hatch-vcs-generated
+# src/spyglass/_version.py (git-ignored) is absent -- which makes
+# `from spyglass import __version__` raise ImportError and breaks every module
+# that imports it (e.g. common_nwbfile, reached during any NWB file insertion).
+# Copy the base worktree's generated file so the import resolves. (--clone envs
+# regenerate their own, correct, file during `pip install -e`.)
+seed_version_file() {
+    local wt="$1"
+    local dst="$wt/src/spyglass/_version.py"
+    local src="$SG_ROOT/$SG_BASE/src/spyglass/_version.py"
+    [[ -f "$dst" || ! -f "$src" ]] && return 0
+    cp "$src" "$dst" \
+        && echo "==> Seeded src/spyglass/_version.py from $SG_BASE" \
+                "(version follows $SG_BASE; use --clone for an exact build)"
+    return 0
 }
 
 ensure_shared_env() {
@@ -144,6 +208,9 @@ cmd_new() {
     fi
     [[ "$gf_tmp" -eq 1 ]] && rm -f "$gf"
 
+    seed_test_data "$wt"
+    seed_version_file "$wt"
+
     local env mode
     if [[ "$clone" -eq 1 ]]; then
         ensure_shared_env
@@ -221,14 +288,104 @@ cmd_ls() {
         done
 }
 
+# Print the worktree path checked out on a given local branch, or nothing.
+worktree_for_branch() {
+    "${GIT[@]}" worktree list --porcelain | awk -v b="refs/heads/$1" '
+        /^worktree /{w=$2} /^branch /{ if ($2 == b) print w }'
+}
+
+# True if <branch> is fully contained in the upstream branch (already merged).
+# Note: misses squash/rebase merges (commits differ); that case is covered by
+# the complementary "no me/<branch> on the fork" name-correspondence signal.
+is_merged_upstream() {
+    "${GIT[@]}" merge-base --is-ancestor \
+        "refs/heads/$1" "refs/remotes/$SG_REMOTE/$SG_RBRANCH" 2>/dev/null
+}
+
+cmd_prune() {
+    local do_it=0
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --do|do) do_it=1; shift ;;
+            -*) echo "Unknown option: $1" >&2; exit 1 ;;
+            *)  echo "Unknown arg: $1" >&2; exit 1 ;;
+        esac
+    done
+
+    echo "==> Fetching $SG_REMOTE; querying $SG_MEREMOTE branches"
+    "${GIT[@]}" fetch "$SG_REMOTE" --quiet || true
+
+    # Name correspondence: a local branch whose name has no live counterpart on
+    # the $SG_MEREMOTE fork has been deleted there -> merged. Query the fork
+    # directly (ls-remote) rather than local tracking refs, so this is correct
+    # even with no fetch refspec / no `-u` upstream config on the branch.
+    local me_heads have_me=1
+    me_heads=$("${GIT[@]}" ls-remote --heads "$SG_MEREMOTE" 2>/dev/null \
+        | awk '{ sub(/^.*refs\/heads\//, ""); print }')
+    if [[ -z "$me_heads" ]]; then
+        have_me=0
+        echo "!! Could not list '$SG_MEREMOTE' branches (unreachable or empty);" \
+             "falling back to merged-into-$SG_REMOTE/$SG_RBRANCH only" >&2
+    fi
+
+    local found=0 branch reason wt
+    while read -r branch; do
+        [[ "$branch" == "$SG_BASE" ]] && continue
+
+        reason=""
+        if [[ "$have_me" -eq 1 ]] && ! awk -v b="$branch" \
+                'BEGIN{f=1} $0==b{f=0} END{exit f}' <<<"$me_heads"; then
+            reason="no $SG_MEREMOTE/$branch (merged & deleted)"
+        elif is_merged_upstream "$branch"; then
+            reason="merged into $SG_REMOTE/$SG_RBRANCH"
+        else
+            continue
+        fi
+
+        wt=$(worktree_for_branch "$branch")
+
+        # Per-worktree opt-out: a `.sgdev` carrying `SG_KEEP=1` is never pruned,
+        # even when its upstream work looks done. Read with sed (not source) so
+        # the keep-check never runs arbitrary code; matches `cmd_ls` above.
+        if [[ -n "$wt" && -f "$wt/.sgdev" ]] \
+                && [[ "$(sed -n 's/^SG_KEEP=//p' "$wt/.sgdev")" == "1" ]]; then
+            echo "keeping '$branch'  (SG_KEEP set in .sgdev; $reason)"
+            continue
+        fi
+
+        found=1
+        if [[ "$do_it" -ne 1 ]]; then
+            if [[ -n "$wt" ]]; then
+                echo "would prune worktree '$(basename "$wt")'" \
+                     "+ branch '$branch'  ($reason)"
+            else
+                echo "would delete branch '$branch'  ($reason)"
+            fi
+            continue
+        fi
+
+        echo "==> Pruning '$branch'  ($reason)"
+        [[ -n "$wt" ]] && cmd_rm "$(basename "$wt")" -f
+        if "${GIT[@]}" branch -D "$branch" >/dev/null 2>&1; then
+            echo "    deleted local branch '$branch'"
+        fi
+    done < <("${GIT[@]}" branch --format='%(refname:short)')
+
+    [[ "$found" -eq 0 ]] && echo "Nothing to prune."
+    [[ "$found" -eq 1 && "$do_it" -ne 1 ]] \
+        && echo "(dry run -- re-run 'sg prune --do' to delete)"
+    return 0
+}
+
 # Dispatch only when executed, not when sourced (sourcing exposes the
 # functions for testing/reuse without running a subcommand).
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     case "${1:-}" in
-        new) shift; cmd_new "$@" ;;
-        rm)  shift; cmd_rm "$@" ;;
-        ls)  shift; cmd_ls "$@" ;;
-        -h|--help|"") sed -n '2,40{/^#/s/^# \{0,1\}//p}' "$0" ;;
+        new)   shift; cmd_new "$@" ;;
+        rm)    shift; cmd_rm "$@" ;;
+        ls)    shift; cmd_ls "$@" ;;
+        prune) shift; cmd_prune "$@" ;;
+        -h|--help|"") awk 'NR==1{next} !/^#/{exit} {sub(/^# ?/,"");print}' "$0" ;;
         *) echo "Unknown subcommand: $1" >&2; echo "Try: sg --help" >&2; exit 1 ;;
     esac
 fi

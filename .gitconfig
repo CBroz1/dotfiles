@@ -5,6 +5,7 @@
 	defaultBranch = me
 [core]
 	editor = /home/cbroz/nvim-linux-x86_64.appimage -c \"lua require('configs')\"
+	excludesfile = /home/cbroz/.gitignore
 [github]
 	user = cbroz1
 [credential "https://github.com"]
