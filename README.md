@@ -1,14 +1,19 @@
 # Setup Linux Machine
 
-These are instructions to my fututre self on how to set up a new linux machine.
+These are instructions to my future self on how to set up a new linux machine.
 
 These instructions are presented in order, based on experience with Pop OS.
 
 ```bash
 git clone github.com/cbroz1/dotfiles ~/dotfiles
 cd ~/dotfiles
-./config.sh
+./config.sh --all   # or select sections: --apt --pip --links --gnome
 ```
+
+`config.sh` requires at least one section flag; run `./config.sh --help` for
+the list. `--apt` needs `sudo`, while `--pip` must run as the normal user, so
+`--all` will skip whichever of the two doesn't match the current privilege and
+print a reminder to re-run it the other way.
 
 In order to run `sbin` scripts directly as sudo, add `~/.local/sbin` to the
 secure path in `/etc/sudoers`:

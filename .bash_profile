@@ -13,7 +13,7 @@ export INFOPATH=/usr/local/texlive/2025/texmf-dist/doc/info:$INFOPATH
 
 # ---------------------------------- Secrets ----------------------------------
 for key_file in ~/.config/*key; do
-    source "$key_file"
+    [ -f "$key_file" ] && source "$key_file"
 done
 
 # ---------------------------------- Settings ----------------------------------
@@ -136,9 +136,9 @@ cact() { conda activate "$1"; }
 ipy() { ${HOME}/miniconda3/envs/"$1"/bin/python -m IPython --no-autoindent; }
 spellcheck() { cspell check "$1" --color | less -r; }
 jupythis() { jupytext --to py notebooks/*"$1"*ipynb ; mv notebooks/*py notebooks/py_scripts; }
-loadenv() { export $(grep -v '^#' ${1:.env} | xargs); }
-scpdown() { scp -i /home/user/.ssh/ucsf -P ${UCSF_SSH_PORT} cbroz@virga-05.cin.ucsf.edu:~/wrk/spyglass/"$1" ~/wrk/spyglass/"$1"; }
-scpup() { scp -i /home/user/.ssh/ucsf -P ${UCSF_SSH_PORT} ~/wrk/spyglass/"$1" cbroz@virga-05.cin.ucsf.edu:~/wrk/spyglass/"$1"; }
+loadenv() { export $(grep -v '^#' "${1:-.env}" | xargs); }
+scpdown() { scp -i $HOME/.ssh/ucsf -P ${UCSF_SSH_PORT} cbroz@virga-05.cin.ucsf.edu:~/wrk/spyglass/"$1" ~/wrk/spyglass/"$1"; }
+scpup() { scp -i $HOME/.ssh/ucsf -P ${UCSF_SSH_PORT} ~/wrk/spyglass/"$1" cbroz@virga-05.cin.ucsf.edu:~/wrk/spyglass/"$1"; }
 killbyname() { killall -s 9 "$1"; }
 lt_git_ignore() {
   ignored=$(git ls-files --others --ignored --exclude-standard)
@@ -275,4 +275,4 @@ else
 fi
 GPG_TTY=`tty`
 export GPG_TTY
-. "$HOME/.cargo/env"
+# . "$HOME/.cargo/env"
