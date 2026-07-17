@@ -26,9 +26,9 @@ set filec
 
 nvim_appimage=$(find ${HOME} -maxdepth 1 -name nvim*appimage 2>/dev/null)
 if [ -n "$nvim_appimage" ]; then
-    alias v="$nvim_appimage -c \"lua require('configs')\""
-    alias nvim="$nvim_appimage -c \"lua require('configs')\""
-    export EDITOR="$nvim_appimage -c \"lua require('configs')\""
+    alias v="$nvim_appimage"
+    alias nvim="$nvim_appimage"
+    export EDITOR="$nvim_appimage"
 else
     alias v='nvim'
     export EDITOR='nvim'

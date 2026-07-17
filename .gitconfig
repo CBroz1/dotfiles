@@ -4,8 +4,9 @@
 [init]
 	defaultBranch = me
 [core]
-	editor = /home/cbroz/nvim-linux-x86_64.appimage -c \"lua require('configs')\"
-	excludesfile = /home/cbroz/.gitignore
+	# No editor set on purpose: git falls back to $EDITOR, which .bash_profile
+	# computes per-machine (nvim appimage if present, else plain nvim).
+	excludesfile = ~/.gitignore
 [github]
 	user = cbroz1
 [credential "https://github.com"]

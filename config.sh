@@ -6,6 +6,7 @@
 # Run with one or more flags to select which sections to apply:
 #   --apt    apt/npm/docker installs (run as sudo)
 #   --pip    python pip installs (run as user)
+#   --conda  create conda envs (e.g. 'lsp' for nvim's pylsp)
 #   --links  link dotfiles to home directory by relative path
 #   --gnome  gnome desktop settings
 #   --all    all of the above
@@ -13,7 +14,7 @@
 usage() {
     grep '^#   --' "$0" | sed 's/^# //'
     echo ""
-    echo "Usage: $0 [--apt] [--pip] [--links] [--gnome] [--all]"
+    echo "Usage: $0 [--apt] [--pip] [--conda] [--links] [--gnome] [--all]"
 }
 
 # apt/npm/docker installs
@@ -56,6 +57,32 @@ do_pip() {
     fi
 }
 
+# conda environments
+do_conda() {
+    # conda is usually a shell function, not on PATH in a plain script; locate
+    # the executable directly.
+    local conda_bin
+    conda_bin=$(command -v conda 2>/dev/null)
+    if [[ -z "$conda_bin" ]]; then
+        for c in "$HOME/miniconda3/bin/conda" "$HOME/miniforge3/bin/conda" \
+                 "$HOME/anaconda3/bin/conda"; do
+            [[ -x "$c" ]] && { conda_bin="$c"; break; }
+        done
+    fi
+    if [[ -z "$conda_bin" ]]; then
+        echo "Skipping conda envs: conda not found"
+        return
+    fi
+    # dedicated language-server env for nvim's pylsp (pycodestyle + black)
+    if "$conda_bin" env list | grep -qE '/envs/lsp$'; then
+        echo "conda env 'lsp' already exists"
+    else
+        echo "Creating conda env 'lsp' (python-lsp-server + python-lsp-black)"
+        "$conda_bin" create -n lsp -c conda-forge \
+            python-lsp-server python-lsp-black -y > /dev/null
+    fi
+}
+
 # link dotfiles
 do_links() {
     cd ~/dotfiles || { echo "Error: Could not access ~/dotfiles"; exit 1; }
@@ -94,7 +121,7 @@ do_gnome() {
 }
 
 # Parse flags
-apt=false pip=false links=false gnome=false
+apt=false pip=false conda=false links=false gnome=false
 
 if [[ $# -eq 0 ]]; then
     usage
@@ -105,9 +132,10 @@ while [[ $# -gt 0 ]]; do
     case "$1" in
         --apt)   apt=true ;;
         --pip)   pip=true ;;
+        --conda) conda=true ;;
         --links) links=true ;;
         --gnome) gnome=true ;;
-        --all)   apt=true; pip=true; links=true; gnome=true ;;
+        --all)   apt=true; pip=true; conda=true; links=true; gnome=true ;;
         -h|--help) usage; exit 0 ;;
         *) echo "Unknown flag: $1"; usage; exit 1 ;;
     esac
@@ -116,5 +144,6 @@ done
 
 $apt   && do_apt
 $pip   && do_pip
+$conda && do_conda
 $links && do_links
 $gnome && do_gnome
